@@ -1,0 +1,3 @@
+[submodule "BillBurgersChallenge"]
+	path = BillBurgersChallenge
+	url = https://github.com/techymaj/bill-burgers-challenge.git
