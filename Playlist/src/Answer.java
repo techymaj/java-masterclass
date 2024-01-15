@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Answer {
+public class Album {
     // write code here
     private String name;
     private String artist;
     private ArrayList<Song> songs;
 
-    public Answer(String name, String artist) {
+    public Album(String name, String artist) {
         this.name = name;
         this.artist = artist;
         this.songs = new ArrayList<Song>();

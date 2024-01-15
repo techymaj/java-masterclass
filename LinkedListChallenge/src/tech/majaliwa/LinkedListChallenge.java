@@ -99,7 +99,7 @@ public class LinkedListChallenge {
             System.out.println("There are no towns to move to");
         }
 
-        if (seek.hasPrevious()) {
+        if (seek.hasPrevious()) { 
             var previousTown = seek.previous();
             System.out.println("Current town is " + previousTown);
         } else {
