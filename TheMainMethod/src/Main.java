@@ -9,14 +9,12 @@ public class Main {
     }
 
     // this block is executed when an instance is created
-    {
-        Boy.create();
-    }
+//    {
+//        Boy.create();
+//    }
 
     // this block is executed when the class is loaded
-    static {
-        Boy.create();
-    }
+
 }
 
 class Person {
@@ -34,6 +32,13 @@ class Person {
 }
 
 class Boy extends Person {
+
+    // the moment the Boy class is loaded, execute this method
+    // remember static members belong to the class itself
+    static {
+        Boy.create();
+    }
+
     public Boy(String name, int age) {
         super(name, age);
     }
