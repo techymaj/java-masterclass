@@ -17,7 +17,8 @@ My main goals for learning Java include:
 
 ## Repository Structure
 
-To be tabled soon
+### [Initializer Blocks](https://github.com/techymaj/java-masterclass/blob/main/TheMainMethod/src/Main.java)
+- **What I learned:** You can use initializers to execute code when the class is loaded in memory or when an object is created from that class
 
 ## Projects
 
