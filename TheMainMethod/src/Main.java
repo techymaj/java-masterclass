@@ -2,7 +2,19 @@ public class Main {
     public static void main(String[] args) {
         Boy boy = new Boy("Francis", 13);
         boy.describe();
+        Main main = new Main();
+//        main.
 
+//        Boy.create();
+    }
+
+    // this block is executed when an instance is created
+    {
+        Boy.create();
+    }
+
+    // this block is executed when the class is loaded
+    static {
         Boy.create();
     }
 }
