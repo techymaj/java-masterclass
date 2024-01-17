@@ -1,4 +1,9 @@
 public class Main implements Skills {
+
+    public static void main(String[] args) {
+        Thoughts thoughts = new Main();
+        thoughts.goodThoughts();
+    }
     @Override
     public boolean knowJava() {
         return false;
@@ -21,6 +26,6 @@ public class Main implements Skills {
 
     @Override
     public void goodThoughts() {
-
+        System.out.println("Thinking...");
     }
 }
