@@ -22,7 +22,7 @@ My main goals for learning Java include:
 
 ## Projects
 
-- ### Udemy Notes App
+1. ### Udemy Notes App
 [Udemy Notes App](https://github.com/techymaj/java-masterclass/tree/main/UdemyNotesApp)
 
 ## Contributions
