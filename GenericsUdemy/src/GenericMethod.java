@@ -12,12 +12,13 @@ public class GenericMethod <T> {
         this.value = value;
     }
 
-    public static <T> void describe(T item) {
+    public static <T extends A & B & C> T describe(T item) {
         // another generic type <T> is declared at the method level.
         // This type parameter is specific to the method and is unrelated to
         // the generic type declared at the class level. It is used only
         // within the scope of the method.
         System.out.println("value is " + item);
+        return item;
     }
 
     public static void main(String[] args) {
@@ -26,7 +27,13 @@ public class GenericMethod <T> {
         GenericMethod<Integer> m = new GenericMethod<>(29);
         System.out.println(g.value);
         System.out.println(m.value);
-        describe("Jack");
-        describe(23);
+        g.describe("Jack");
+        System.out.println(s);
+        int a = describe(23);
+        System.out.println(a);
     }
 }
+
+class A {}
+interface B {}
+interface C {}
