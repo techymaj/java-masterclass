@@ -22,6 +22,11 @@ public class Static {
             Static stat = new Static();
             int sum = stat.age + stat.year;
             System.out.println(sum);
+
+            // from with-in the static inner class, you can instantiate it
+            Inner in = new Inner();
+            String s = in.value;
+            System.out.println(s);
         }
     }
 }
