@@ -3,6 +3,12 @@ public class OuterClass {
     // inner class, declared in class body
     class InnerClass {
         final String name = "jax";
+
+        public static void main(String[] args) {
+            // compiler error: cannot instantiate Instance inner from with-in
+//            InnerClass in = new InnerClass();
+//            in.name;
+        }
     }
 
 }
