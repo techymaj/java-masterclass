@@ -28,6 +28,7 @@ public class Node extends ListItem {
 
     @Override
     public int compareTo(ListItem item) {
+
         if (this.value > item) {
             return 1;
         } else if (this.value < item) {

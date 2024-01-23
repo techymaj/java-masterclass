@@ -25,4 +25,13 @@ public class Building implements Mappable {
     public String getIconType() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Building{" +
+                "point='" + point + '\'' +
+                ", name='" + name + '\'' +
+                ", usage='" + usage + '\'' +
+                '}';
+    }
 }
