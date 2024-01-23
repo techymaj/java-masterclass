@@ -1,13 +1,24 @@
 public class OuterClass {
 
+    final private static String named = "Denis";
+
     // inner class, declared in class body
-    class InnerClass {
+    class InnerClass implements IAM {
         final String name = "jax";
 
-        public static void main(String[] args) {
+        public void mainer() {
             // compiler error: cannot instantiate Instance inner from with-in
 //            InnerClass in = new InnerClass();
 //            in.name;
+            OuterClass obj = new OuterClass();
+            OuterClass.InnerClass m = obj.new InnerClass();
+            m.me();
+        }
+    }
+
+    interface IAM {
+        default void me() {
+            System.out.println("I am " + named);
         }
     }
 
@@ -15,10 +26,11 @@ public class OuterClass {
 
 class Main {
     public static void main(String[] args) {
-        // access is through an instance of the outer class
+//        // access is through an instance of the outer class
         OuterClass obj = new OuterClass();
         OuterClass.InnerClass inner = obj.new InnerClass();
-        String s = inner.name;
-        System.out.println(s);
+        inner.me();
+//        String s = inner.name;
+//        System.out.println(s);
     }
 }
