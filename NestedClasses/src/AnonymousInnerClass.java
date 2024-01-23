@@ -1,4 +1,5 @@
 public class AnonymousInnerClass {
+
     public static void main(String[] args) {
         // anon class = one instance of the class
         Anon anon = new Anon() {
@@ -25,8 +26,13 @@ public class AnonymousInnerClass {
             public void define(String name) {
                 System.out.println("Yo, still anon, " + name);
             }
+
+            public void me() {
+                System.out.println("me");
+            }
         };
         yo.define("JAX");
+//        yo.me(); // compile time error. not a recognized method
 
         Alo alo = new Alo() {
             @Override
@@ -35,6 +41,20 @@ public class AnonymousInnerClass {
             }
         };
         alo.define("..");
+
+        // passing anonymous classes as arguments
+        var s = titan(new Thanos() {
+            @Override
+            String iam() {
+                return "Thanos";
+            }
+        });
+        String i = s.iam();
+        System.out.println(i);
+    }
+
+    static Thanos titan(Thanos s) {
+        return s;
     }
 }
 
@@ -60,3 +80,7 @@ class Yo implements IAnon {
 }
 
 abstract class Alo implements IAnon {}
+
+abstract class Thanos {
+    abstract String iam();
+}
