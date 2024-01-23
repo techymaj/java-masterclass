@@ -43,6 +43,7 @@ public class AnonymousInnerClass {
         alo.define("..");
 
         // passing anonymous classes as arguments
+        // instantiate object of type Thanos and define unnamed subclass at the same time
         var s = titan(new Thanos() {
             @Override
             String iam() {
