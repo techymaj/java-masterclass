@@ -8,30 +8,30 @@ public class Album {
 
     private SongList songs;
 
-    public Album(String name, String artist, SongList songs) {
+    public Album(String name, String artist) {
         this.name = name;
         this.artist = artist;
         this.songs = new SongList();
     }
 
     public static class SongList {
-        private ArrayList<Song> songs1;
+        private ArrayList<Song> songs;
 
         private SongList() {
-            this.songs1 = new ArrayList<Song>();
+            songs = new ArrayList<>();
         }
 
         private boolean add(Song song) {
-            if (songs1.contains(song)) {
+            if (songs.contains(song)) {
                 return false;
             }
-            songs1.add(song);
+            songs.add(song);
 
             return true;
         }
 
         private Song findSong(String title) {
-            for (Song song : songs1) {
+            for (Song song : songs) {
                 if (song.getTitle().equals(title)) {
                     return song;
                 }
@@ -43,23 +43,18 @@ public class Album {
         private Song findSong(int trackNumber) {
 
             int index = trackNumber - 1;
-            if ((index > 0) && (index < songs1.size())) {
-                return songs1.get(index);
+            if ((index > 0) && (index < songs.size())) {
+                return songs.get(index);
             }
             return null;
         }
-    }
-
-    public Album(String name, String artist) {
-        this.name = name;
-        this.artist = artist;
     }
 
     public boolean addSong(String title, double duration) {
 
 
         if (songs.findSong(title) == null) {
-            songs.songs1.add(new Song(title, duration));
+            songs.add(new Song(title, duration));
             return true;
         }
         return false;
@@ -78,8 +73,8 @@ public class Album {
     public boolean addToPlayList(int trackNumber, LinkedList<Song> playList) {
 
         int index = trackNumber - 1;
-        if ((index >= 0) && (index <= songs.songs1.size())) {
-            playList.add(songs.songs1.get(index));
+        if ((index >= 0) && (index <= songs.songs.size())) {
+            playList.add(songs.songs.get(index));
             return true;
         }
         return false;
