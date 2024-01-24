@@ -23,9 +23,10 @@ public class LambdaExpression {
         });
 
         System.out.println("-------------");
-
+        String prefix = "nato";
         ReturnLambda myNameIs = name -> {
-            var upper = name.toUpperCase();
+//            prefix = "alo"; // this is not allowed. prefix must be final or effectively final
+            var upper = prefix + name.toUpperCase();
             return "Your name is " + upper;
         };
         System.out.println(myNameIs.name("John"));

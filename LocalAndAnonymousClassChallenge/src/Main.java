@@ -20,9 +20,7 @@ public class Main {
             this.e = e;
         }
 
-        Local localSort = new Local() {
 
-        };
     }
 
     private static void take(List<Employee> list) {
