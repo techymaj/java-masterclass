@@ -42,11 +42,13 @@ public class Main {
 //            int val = jax.compareTo(student);
 //            System.out.println(val);
 //        }
-        System.out.println("Result = " + jax.compareTo(students[2]));
+        // raw usage of Comparable leads to class cast exceptions
+        System.out.println("Result = " + jax.compareTo("mary"));
     }
 }
 
-class Student implements Comparable<Student> {
+// raw usage of Comparable
+class Student implements Comparable {
     private String name;
     private Integer age;
 
@@ -67,8 +69,9 @@ class Student implements Comparable<Student> {
 //    }
 
     @Override
-    public int compareTo(Student o) {
+    public int compareTo(Object o) {
+        Student other = (Student) o;
         // compare based on name
-        return this.name.compareTo(o.name);
+        return this.name.compareTo(other.name);
     }
 }
