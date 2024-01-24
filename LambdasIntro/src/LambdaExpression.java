@@ -29,6 +29,7 @@ public class LambdaExpression {
             var upper = prefix + name.toUpperCase();
             return "Your name is " + upper;
         };
+//        prefix = "what about this?"; // also not allowed
         System.out.println(myNameIs.name("John"));
     }
 }
