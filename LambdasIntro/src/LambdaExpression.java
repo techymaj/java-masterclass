@@ -17,7 +17,9 @@ public class LambdaExpression {
 
         System.out.println("-------------");
 
-        list.forEach(s -> {
+//        String s = "hello"; // will cause a compile time error if we use s in the lambda expression
+
+        list.forEach(s -> { // s is already defined in the scope
             char first = s.charAt(0);
             System.out.println(s + " means " + first);
         });
