@@ -32,6 +32,7 @@ public class Main {
 
 //        System.out.println(people);
 
+//        @FunctionalInterface
         interface EnhancedComparator<T> extends Comparator<T> {
             int secondLevelCompare(T t1, T t2);
         }
