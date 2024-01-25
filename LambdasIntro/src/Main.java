@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 
 public class Main {
     record Person(String firstName, String lastName) {
@@ -81,6 +79,11 @@ public class Main {
                 )
         );
 
+        System.out.println("-------------");
+        String[] names = {"John", "Jane", "Jill", "Doe", "Harry", "Hank", "Tony", "Pepper"};
+        String[] randomList = randomlySelectedValues(15, names, () -> new Random().nextInt(0, names.length));
+        System.out.println(Arrays.toString(randomList));
+
     }
 
     public static <T> T calculator(T t1, T t2, BinaryOperator<T> operation) {
@@ -91,5 +94,18 @@ public class Main {
 
     public static <T> void processPoint(T t1, T t2, BiConsumer<T, T> consumer) {
         consumer.accept(t1, t2);
+    }
+
+    public static String[] randomlySelectedValues(int count,
+                                                  String[] values,
+                                                  Supplier<Integer> s) {
+
+        String[] selectedValues = new String[count];
+
+        for (int i = 0; i < count; i++) {
+            selectedValues[i] = values[s.get()];
+        }
+
+        return selectedValues;
     }
 }
