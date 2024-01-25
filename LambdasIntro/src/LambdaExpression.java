@@ -33,6 +33,17 @@ public class LambdaExpression {
         };
 //        prefix = "what about this?"; // also not allowed
         System.out.println(myNameIs.name("John"));
+
+        list.removeIf(s -> s.equalsIgnoreCase("bravo"));
+        list.forEach(s -> System.out.println(s));
+
+        System.out.println("-------------");
+
+        list.addAll(List.of("easy", "earnest", "eager"));
+        list.forEach(s -> System.out.println(s));
+        list.removeIf(s -> s.startsWith("ea"));
+        System.out.println("-------ea------");
+        list.forEach(s -> System.out.println(s));
     }
 }
 
