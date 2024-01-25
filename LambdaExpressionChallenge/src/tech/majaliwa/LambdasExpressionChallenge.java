@@ -14,7 +14,8 @@ public class LambdasExpressionChallenge {
         List<String> namesListed = Arrays.asList(names);
         namesListed.replaceAll(s -> s.toUpperCase());
         System.out.println("-------------toUpperCase---------------");
-        System.out.println(namesListed);
+        // the underlying names array is modified
+        System.out.println(Arrays.toString(names));
         System.out.println();
         namesListed.replaceAll(s -> {
             Random randomInitial = new Random();
@@ -27,6 +28,7 @@ public class LambdasExpressionChallenge {
         namesListed.replaceAll(s -> {
             var namesSplit = s.split(" ");
             var firstName = namesSplit[0];
+            // TODO: use StringBuilder to reverse the first name
             var lastNameReversed = firstName.split("");
             for (int i = 0; i < lastNameReversed.length / 2; i++) {
                 var temp = "";
