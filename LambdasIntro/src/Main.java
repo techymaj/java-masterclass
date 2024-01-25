@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BinaryOperator;
 
 public class Main {
     record Person(String firstName, String lastName) {
@@ -19,6 +20,8 @@ public class Main {
                 new Person("Pepper", "Stark"),
                 new Person("Jane", "Foster"))
         );
+
+        people.forEach(s -> System.out.println(s));
 
 //        var customComparator = new Comparator<Person>() {
 //            @Override
@@ -54,5 +57,15 @@ public class Main {
 
         people.sort(comparatorMixed);
         System.out.println(people);
+
+        int result = calculator(5, 10, (a, b) -> a + b);
+        System.out.println(result);
+
+    }
+
+    public static <T> T calculator(T t1, T t2, BinaryOperator<T> operation) {
+        T result = operation.apply(t1, t2);
+        System.out.println("Result of operation is: " + result);
+        return result;
     }
 }
