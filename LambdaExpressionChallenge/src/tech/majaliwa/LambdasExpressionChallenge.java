@@ -20,6 +20,7 @@ public class LambdasExpressionChallenge {
             Random randomInitial = new Random();
             return s + " " + (char) randomInitial.nextInt(65, 91) + ".";
         });
+
         System.out.println("-------------addMiddleName + period---------------");
         namesListed.forEach(name -> System.out.println(name));
         System.out.println();
@@ -36,6 +37,7 @@ public class LambdasExpressionChallenge {
             var lName = String.join("", lastNameReversed);
             return s + " " + lName;
         });
+
         System.out.println("-------------addLastName as FirstName Reversed---------------");
         namesListed.forEach(name -> System.out.println(name));
         System.out.println();
