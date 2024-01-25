@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LambdaExpression {
@@ -44,6 +45,35 @@ public class LambdaExpression {
         list.removeIf(s -> s.startsWith("ea"));
         System.out.println("-------ea------");
         list.forEach(s -> System.out.println(s));
+
+        list.replaceAll(s -> s.charAt(0) + " - " + s.toUpperCase());
+        System.out.println("-------replaceAll------");
+        list.forEach(s -> System.out.println(s));
+
+        String[] array = new String[10];
+        System.out.println(Arrays.toString(array));
+        Arrays.fill(array, "");
+        System.out.println(Arrays.toString(array));
+
+        Arrays.setAll(array, i -> "" + (i + 1) + ". ");
+        System.out.println(Arrays.toString(array));
+
+        Arrays.setAll(array, i -> "" + (i + 1) + ". "
+                        + switch (i) {
+                    case 0 -> "one";
+                    case 1 -> "two";
+                    case 2 -> "three";
+                    case 3 -> "four";
+                    case 4 -> "five";
+                    case 5 -> "six";
+                    case 6 -> "seven";
+                    case 7 -> "eight";
+                    case 8 -> "nine";
+                    case 9 -> "ten";
+                    default -> "many";
+                }
+        );
+        System.out.println(Arrays.toString(array));
     }
 }
 
