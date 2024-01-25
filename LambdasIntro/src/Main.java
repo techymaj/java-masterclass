@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 
 public class Main {
@@ -61,11 +62,34 @@ public class Main {
         int result = calculator(5, 10, (a, b) -> a + b);
         System.out.println(result);
 
+        var coords = Arrays.asList(
+                new double[]{47.6062, -122.3321},
+                new double[]{40.7128, -74.0060},
+                new double[]{51.5074, -0.1278});
+        coords.forEach(coord -> System.out.println(Arrays.toString(coord)));
+
+        BiConsumer<Double, Double> p1 = (lat, lng) -> System.out.println("Seattle: " + lat + ", " + lng);
+
+        var firstPoint = coords.get(0);
+        processPoint(firstPoint[0], firstPoint[1], p1);
+
+        System.out.println("-------------");
+
+        coords.forEach(coord -> processPoint(coord[0], coord[1], p1));
+        coords.forEach(coord -> processPoint(coord[0], coord[1],
+                        (lat, lng) -> System.out.printf("[Lat: %f]: [Long: %f]\n", lat, lng)
+                )
+        );
+
     }
 
     public static <T> T calculator(T t1, T t2, BinaryOperator<T> operation) {
         T result = operation.apply(t1, t2);
         System.out.println("Result of operation is: " + result);
         return result;
+    }
+
+    public static <T> void processPoint(T t1, T t2, BiConsumer<T, T> consumer) {
+        consumer.accept(t1, t2);
     }
 }
