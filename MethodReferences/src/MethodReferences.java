@@ -76,6 +76,14 @@ public class MethodReferences {
         String iCanTransformYa = "meDeow".transform(String::toUpperCase);
         System.out.println(iCanTransformYa);
 
+        Function<String, Boolean> f0 = String::isEmpty;
+        boolean des = f0.apply("");
+        System.out.println("What is " + des);
+
+        // remember transform() takes a lambda as an argument
+        boolean resultBoolean = iCanTransformYa.transform(f0);
+        System.out.println(resultBoolean);
+
 
     }
 
