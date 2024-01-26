@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.*;
 
 public class MethodReferences {
@@ -69,7 +70,18 @@ public class MethodReferences {
         int v = value.applyAsInt(34.54);
         System.out.println(v);
 
+        // .transform() returns a new String
+        // the transform() takes a lambda expression
+        // (or a method reference) as its argument.
+        String iCanTransformYa = "meDeow".transform(String::toUpperCase);
+        System.out.println(iCanTransformYa);
 
+
+    }
+
+    @FunctionalInterface
+    interface Transformer {
+        Object transform(UnaryOperator<String> s);
     }
 
     @FunctionalInterface
