@@ -3,6 +3,10 @@ public class InstancesAndStatic {
     public static void main(String[] args) {
         InstancesAndStatic instancesAndStatic = new InstancesAndStatic();
         instancesAndStatic.iam();
+
+        // bound method reference
+        Runnable iam = instancesAndStatic::iam;
+        iam.run();
     }
 
     private void iam() {
