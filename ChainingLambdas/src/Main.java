@@ -1,6 +1,9 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Main {
 
@@ -38,7 +41,30 @@ public class Main {
                 .andThen(s -> s.concat(" Majaliwa"))
                 .andThen(s -> s.split(" "))
                 .andThen(s -> s[1].toUpperCase() + ", " + s[0])
-                .andThen(String::length);
+                .andThen(String::length)
+                .andThen(i -> i * 2);
         System.out.println(f2.apply(name));
+
+        String[] names = {"Wilfried", "Majaliwa", "Ann", "Bob"};
+        Consumer<String> print = s -> System.out.print(s.charAt(0));
+        Consumer<String> printIt = System.out::println;
+        Arrays.asList(names).forEach(print
+                .andThen(s -> System.out.print(" - "))
+                .andThen(printIt));
+
+        // Convenience methods for Predicate
+        Predicate<String> p1 = s -> s.equals("Wilfried");
+        Predicate<String> p2 = s -> s.equalsIgnoreCase("WILFried");
+        Predicate<String> p3 = s -> s.startsWith("Wil");
+        Predicate<String> p4 = s -> s.endsWith("fred");
+
+        Predicate<String> combined = p1.or(p2);
+        System.out.println(combined.test(name));
+
+        Predicate<String> combined2 = p3.and(p4);
+        System.out.println(combined2.test(name));
+
+        Predicate<String> combined3 = p3.and(p4).negate();
+        System.out.println(combined3.test(name));
     }
 }
