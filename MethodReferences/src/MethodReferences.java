@@ -58,6 +58,13 @@ public class MethodReferences {
         UnaryOperator<String> concatenatedToo = str -> str + "!";
         System.out.println(concatenatedToo.apply("I get it now"));
 
+        // won't compile. expected one param, found 2
+//        UnaryOperator<String> unoReversal = (String str1, String str2) -> str1.concat(str2);
+
+        UnaryOperator<String> upperCased = String::toUpperCase; // can only use lambdas on functional interfaces
+        String usurped = upperCased.apply("usurper");
+        System.out.println(usurped);
+
         ToIntFunction<Double> value = Double::intValue;
         int v = value.applyAsInt(34.54);
         System.out.println(v);
