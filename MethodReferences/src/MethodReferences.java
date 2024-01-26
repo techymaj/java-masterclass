@@ -45,6 +45,29 @@ public class MethodReferences {
         System.out.println("Getting array");
         PlainOld[] pojos = seedArray(PlainOld::new, 5);
         System.out.println(Arrays.toString(pojos));
+
+        // String concatenated = String::concat; // String is not a functional interface, won't compile
+        StringButFunctional concatenated = String::concat;
+        String s = concatenated.join("Oh My ", "GOD!!!");
+        System.out.println(s);
+
+        // Non-static method cannot be referenced from a static context
+//        UnaryOperator<String> concatenatedToo = String::concat;
+
+        // UnaryOperator extends Function which declares apply()
+        UnaryOperator<String> concatenatedToo = str -> str + "!";
+        System.out.println(concatenatedToo.apply("I get it now"));
+
+        ToIntFunction<Double> value = Double::intValue;
+        int v = value.applyAsInt(34.54);
+        System.out.println(v);
+
+
+    }
+
+    @FunctionalInterface
+    interface StringButFunctional {
+        String join(String s1, String s2);
     }
 
     private static <T> void calculator(BinaryOperator<T> binaryOperator, T t1, T t2) {
@@ -65,6 +88,7 @@ class PlainOld {
     private static int last_id = 1;
     private int id;
     public String name;
+
     public PlainOld() {
         id = last_id++; // assign and then increment
         System.out.println("creating a plain old object with id " + id);
@@ -75,3 +99,4 @@ class PlainOld {
         return getClass().getName() + " " + id;
     }
 }
+
