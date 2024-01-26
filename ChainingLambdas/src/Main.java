@@ -33,5 +33,12 @@ public class Main {
                 .andThen(s -> s.split(" "))
                 .andThen(s -> s[1].toUpperCase() + ", " + s[0]);
         System.out.println(f1.apply(name));
+
+        Function<String, Integer> f2 = uName
+                .andThen(s -> s.concat(" Majaliwa"))
+                .andThen(s -> s.split(" "))
+                .andThen(s -> s[1].toUpperCase() + ", " + s[0])
+                .andThen(String::length);
+        System.out.println(f2.apply(name));
     }
 }
