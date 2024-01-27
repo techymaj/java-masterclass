@@ -1,6 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -66,5 +65,38 @@ public class Main {
 
         Predicate<String> combined3 = p3.and(p4).negate();
         System.out.println(combined3.test(name));
+
+        record Person(String firstName, String lastName) {
+        }
+
+        List<Person> list = new ArrayList<>(List.of(
+                new Person("Wilfried", "Majaliwa"),
+                new Person("Ann", "Karenina"),
+                new Person("Ann", "Anna"),
+                new Person("Bob", "Moose")
+        ));
+
+        list.sort((o1, o2) -> o1.firstName().compareTo(o2.firstName()));
+        list.forEach(System.out::println);
+
+        System.out.println("----");
+
+        list.sort(Comparator.comparing(Person::firstName));
+        list.forEach(System.out::println);
+
+        System.out.println("----");
+
+        list.sort(Comparator.comparing(Person::firstName)
+                .thenComparing(Person::lastName)
+        );
+        list.forEach(System.out::println);
+
+        System.out.println("----");
+
+        list.sort(Comparator.comparing(Person::firstName)
+                .thenComparing(Person::lastName)
+                .reversed()
+        );
+        list.forEach(System.out::println);
     }
 }
