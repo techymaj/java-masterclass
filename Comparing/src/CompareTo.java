@@ -1,20 +1,19 @@
-public class CompareTo implements Comparable<Integer> {
+public class CompareTo implements Comparable<String> {
 
-    private int a;
-    private int b;
+    private String a;
 
-    public CompareTo(int a, int b) {
+    public CompareTo(String a) {
         this.a = a;
-        this.b = b;
     }
 
     public static void main(String[] args) {
-        CompareTo compareTo = new CompareTo(10, 20);
-        int result = compareTo.compareTo(10);
+        Comparable<String> num = new CompareTo("Jax");
+        int result = num.compareTo("Jax");
+        System.out.println(result);
     }
 
     @Override
-    public int compareTo(Integer o) {
-        return Integer.compare(a, b);
+    public int compareTo(String o) {
+        return a.compareTo(o);
     }
 }
