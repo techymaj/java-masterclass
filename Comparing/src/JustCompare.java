@@ -34,5 +34,20 @@ class Student {
         int result = compareByName.compare(jax, jj);
         System.out.println(result);
 
+        Student[] students = {
+                new Student("Jax"),
+                new Student("JaJ"),
+                new Student("Jane"),
+                new Student("Joe")
+        };
+        // No need for students to implement Comparable interface. it will sort still
+        java.util.Arrays.sort(students, compareByName);
+        System.out.println(java.util.Arrays.toString(students));
+
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
