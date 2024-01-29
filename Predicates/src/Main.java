@@ -10,7 +10,17 @@ public class Main {
 
         findHer(names);
 
+        System.out.println();
+        System.out.println("Arrays.sort() Sorting by length...");
+        Arrays.sort(names, Comparator.comparing(String::length));
+        System.out.println(Arrays.toString(names));
+        for (var name : names) {
+            System.out.println(name);
+        }
+        System.out.println();
+
         var namesList = Arrays.asList(names);
+        System.out.println("namesList.sort() Sorting by length...");
         namesList.sort(Comparator.comparing(String::length));
         System.out.println(namesList);
         namesList.forEach(System.out::println);
