@@ -130,6 +130,7 @@ public class Main {
         Card.printDeck("Sorted by suit (default rows)", deckOfCards);
         System.out.println();
 
-        Card.printDeck("Sorted by suit (custom rows)", deckOfCards, 12);
+        deckOfCards.sort(Comparator.comparing(Card::face));
+        Card.printDeck("Sorted by face (custom rows)", deckOfCards, 12);
     }
 }
