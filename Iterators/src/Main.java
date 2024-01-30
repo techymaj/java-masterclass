@@ -15,5 +15,7 @@ public class Main {
             iterator.remove();
         }
         System.out.println(list);
+        list.clear();
+        System.out.println("Cleared: " + list);
     }
 }
