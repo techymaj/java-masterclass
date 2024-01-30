@@ -75,6 +75,7 @@ public class Main {
                 }
             }
         }
+
         public static void printDeck(String description, List<Card> deckOfCards) {
             System.out.println(description);
 
@@ -92,19 +93,26 @@ public class Main {
             }
         }
 
+        public static List<Card> getStandardDeck() {
+            List<Card> deckOfCards = new ArrayList<>(52);
+            for (int rank = 0; rank <= 12; rank++) {
+                deckOfCards.add(new Card(rank, SUIT.HEARTS, Face.getFace(rank)));
+                deckOfCards.add(new Card(rank, SUIT.SPADES, Face.getFace(rank)));
+                deckOfCards.add(new Card(rank, SUIT.CLUBS, Face.getFace(rank)));
+                deckOfCards.add(new Card(rank, SUIT.DIAMONDS, Face.getFace(rank)));
+            }
+
+            return deckOfCards;
+        }
+
         public String toString() {
             return face.face + (char) suit.ascii + "(" + rank + ")";
         }
     }
 
     public static void main(String[] args) {
-        List<Card> deckOfCards = new ArrayList<>(52);
-        for (int rank = 0; rank <= 12; rank++) {
-            deckOfCards.add(new Card(rank, SUIT.HEARTS, Face.getFace(rank)));
-            deckOfCards.add(new Card(rank, SUIT.SPADES, Face.getFace(rank)));
-            deckOfCards.add(new Card(rank, SUIT.CLUBS, Face.getFace(rank)));
-            deckOfCards.add(new Card(rank, SUIT.DIAMONDS, Face.getFace(rank)));
-        }
+
+        var deckOfCards = Card.getStandardDeck();
 
         System.out.println("---------------Helper Methods-----------------");
 
