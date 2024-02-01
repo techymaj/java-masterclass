@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -55,59 +52,82 @@ public class Main {
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
         var scanner = new Scanner(System.in);
         var playerTurn = true;
+        var random = new Random();
 
         while (true) {
+            System.out.println("Pile: " + pile);
+            // Player's turn
             if (playerTurn) {
                 System.out.println("Your turn");
                 System.out.println("Your hand: " + player.getHand());
-                System.out.println("Pile: " + pile);
-                System.out.println("Deck size: " + deck.size());
-                System.out.println("Enter the position of the card you want to play (1 - 7)");
+                System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ")");
                 var position = scanner.nextInt();
                 var playedCard = player.playCard(position);
                 checkIfMatchingFace(player, playedCard, pile);
                 checkIfMatchingSuit(player, playedCard, pile);
                 checkIfPlayerWon(player);
-                playerTurn = false;
+                playerTurn = false; // Switch to AI's turn only if player successfully played a card
             }
-            System.out.println("Pile: " + pile);
-            System.out.println("Your hand: " + player.getHand());
-            break;
+
+            // AI's turn (if player successfully played a card)
+            if (!playerTurn) {
+                System.out.println("AI's turn");
+                random = new Random();
+                var randomNum = random.nextInt(0, ai.getHand().size() - 1);
+//                System.out.println("A.I played card at position: " + randomNum);
+                var cardPlayed = ai.playCard(randomNum + 1);
+                System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
+                checkIfMatchingFace(ai, cardPlayed, pile);
+                checkIfMatchingSuit(ai, cardPlayed, pile);
+                checkIfPlayerWon(ai);
+                playerTurn = true; // Switch back to player's turn
+            }
         }
     }
+
 
     public static void getPile(List<Card> pile) {
         System.out.println("Pile: " + pile);
     }
 
-    public static void addToPile(User player, Card card, List<Card> pile) {
+    public static <T extends User> void addToPile(T user, Card card, ArrayList<Card> pile) {
 //        followFace(player, card, pile);
         pile.add(card);
     }
 
-    private static void pileIsEmpty(User player, Card card, List<Card> pile) {
-        if (pile.isEmpty()) {
+    private static <T extends User> void pileIsEmpty(T user, Card card, ArrayList<Card> pile) {
+        if (pile.isEmpty()
+                || !card.face().equals(pile.get(pile.size() - 1).face())
+                || !card.suit().equals(pile.get(pile.size() - 1).suit())
+        ) {
             System.out.println("You can play this card");
-            addToPile(player, card, pile);
+            addToPile(user, card, pile);
         }
     }
 
-    public static void checkIfMatchingFace(User player, Card card, List<Card> pile) {
-        pileIsEmpty(player, card, pile);
-        if (card.face().equals(pile.get(pile.size() - 1).face()) && pile.size() > 1) {
-            addToPile(player, card, pile);
-        } else if (pile.size() > 1){
-            System.out.println("You can't play this card");
-        }
+
+    public static <T extends User> void checkIfMatchingFace(T user, Card card, ArrayList<Card> pile) {
+        pileIsEmpty(user, card, pile);
+//        while (true) {
+//            if (card.face().equals(pile.get(pile.size() - 1).face()) && pile.size() > 1) {
+//                addToPile(user, card, pile);
+//                break;
+//            } else if (pile.size() > 1){
+//                System.out.println("You can't play this card");
+//            }
+//        }
     }
 
-    public static void checkIfMatchingSuit(User player, Card card, List<Card> pile) {
-        pileIsEmpty(player, card, pile);
-        if (card.suit().equals(pile.get(pile.size() - 1).suit()) && pile.size() > 1) {
-            addToPile(player, card, pile);
-        } else if (pile.size() > 1){
-            System.out.println("You can't play this card");
-        }
+    public static <T extends User> void checkIfMatchingSuit(T user, Card card, ArrayList<Card> pile) {
+        pileIsEmpty(user, card, pile);
+//        while (true) {
+//            if (card.suit().equals(pile.get(pile.size() - 1).suit()) && pile.size() > 1) {
+//                addToPile(user, card, pile);
+//                break;
+//            } else if (pile.size() > 1){
+//                System.out.println("You can't play this card");
+//            }
+//        }
     }
 
 //    public static <T extends User> void followFace(T player, Card cardPlayed, List<Card> pile) {

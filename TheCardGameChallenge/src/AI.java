@@ -50,23 +50,4 @@ public class AI extends User implements PlayerInterface {
         deck.subList(0, 5).clear();
         return cardToPick;
     }
-
-    @Override
-    public Card playCard(int position) {
-        return null;
-    }
-
-//    @Override
-//    public Card playCard(int position) {
-//        var iterator = this.getHand().listIterator();
-//        while (iterator.hasNext()) {
-//            var card = iterator.next();
-//            if (iterator.nextIndex() == position) {
-//                System.out.println("You played: " + card);
-//                iterator.remove();
-//                return;
-//            }
-//        }
-//    }
-
 }

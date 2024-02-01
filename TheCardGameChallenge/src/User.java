@@ -54,7 +54,7 @@ public class User {
         while (iterator.hasNext()) {
             var card = iterator.next();
             if (card.equals(cardToPlay)) {
-                System.out.println("You played: " + card);
+                System.out.println(this.name + " played: " + card);
                 iterator.remove();
             }
         }
