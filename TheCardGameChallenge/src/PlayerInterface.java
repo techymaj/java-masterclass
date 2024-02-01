@@ -7,5 +7,5 @@ public interface PlayerInterface {
     List<Card> pickTwoCards(ArrayList<Card> deck);
     List<Card> pickThreeCards(ArrayList<Card> deck);
     List<Card> pickFiveCards(ArrayList<Card> deck);
-    Card playCard(int position);
+//    Card playCard(int position);
 }

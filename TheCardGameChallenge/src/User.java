@@ -46,4 +46,19 @@ public class User {
         this.hand.addAll(initialHand);
         deck.subList(0,7).clear();
     }
+
+    public Card playCard(int position) {
+        var iterator = this.hand.listIterator();
+        var cardToPlay = this.hand.get(position - 1);
+
+        while (iterator.hasNext()) {
+            var card = iterator.next();
+            if (card.equals(cardToPlay)) {
+                System.out.println("You played: " + card);
+                iterator.remove();
+            }
+        }
+
+        return cardToPlay;
+    }
 }

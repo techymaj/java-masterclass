@@ -51,20 +51,4 @@ public class Player extends User implements PlayerInterface {
         return cardToPick;
     }
 
-    @Override
-    public Card playCard(int position) {
-        var iterator = this.getHand().listIterator();
-        var cardToPlay = this.getHand().get(position - 1);
-
-        while (iterator.hasNext()) {
-            var card = iterator.next();
-            if (card.equals(cardToPlay)) {
-                System.out.println("You played: " + card);
-                iterator.remove();
-            }
-        }
-
-        return cardToPlay;
-    }
-
 }
