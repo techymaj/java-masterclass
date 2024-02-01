@@ -32,6 +32,7 @@ public class Main {
         String playerName = scanner.nextLine();
 
         System.out.println();
+        System.out.println("---------- Game in session ----------");
         System.out.println("You are now playing with the A.I");
 
         System.out.println("Shuffling deck...");
@@ -39,23 +40,78 @@ public class Main {
 
         var player = new Player(playerName);
         var AI = new AI("AI");
+        var pile = new ArrayList<Card>();
 
         System.out.println("Dealing cards...");
         player.setInitialHand(deck);
         AI.setInitialHand(deck);
         Deck.printDeck("Current deck", deck, 4);
         System.out.println("Size of deck: " + deck.size());
-        System.out.println("Woman Dancing: "); // Woman Dancing emoji
-        System.out.println("Man Dancing: \uD83D\uDD7A");
 
-        gameInSession(player, AI, deck);
+        gameInSession(player, AI, deck, pile);
 
     }
 
-    private static void gameInSession(Player player, AI ai, ArrayList<Card> deck) {
+    private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
+        var scanner = new Scanner(System.in);
+        var playerTurn = true;
+
+        while (true) {
+            if (playerTurn) {
+                System.out.println("Your turn");
+                System.out.println("Your hand: " + player.getHand());
+                System.out.println("Pile: " + pile);
+                System.out.println("Deck size: " + deck.size());
+                System.out.println("Enter the position of the card you want to play (1 - 7)");
+                var position = scanner.nextInt();
+                var playedCard = player.playCard(position);
+                checkIfMatchingFace(playedCard, pile);
+                checkIfMatchingSuit(playedCard, pile);
+                checkIfPlayerWon(player);
+                playerTurn = false;
+            }
+            System.out.println("Your hand: " + player.getHand());
+            break;
+        }
     }
 
     public static void getPile(List<Card> pile) {
         System.out.println("Pile: " + pile);
+    }
+
+    public static void addToPile(Card card, List<Card> pile) {
+        pile.add(card);
+    }
+
+    private static void pileIsEmpty(Card card, List<Card> pile) {
+        if (pile.isEmpty()) {
+            System.out.println("You can play this card");
+            addToPile(card, pile);
+        }
+    }
+
+    public static void checkIfMatchingFace(Card card, List<Card> pile) {
+        pileIsEmpty(card, pile);
+        if (card.face().equals(pile.get(pile.size() - 1).face())) {
+            addToPile(card, pile);
+        } else {
+            System.out.println("You can't play this card");
+        }
+    }
+
+    public static void checkIfMatchingSuit(Card card, List<Card> pile) {
+        pileIsEmpty(card, pile);
+        if (card.suit().equals(pile.get(pile.size() - 1).suit())) {
+            addToPile(card, pile);
+        } else {
+            System.out.println("You can't play this card");
+        }
+    }
+
+    public static <T extends User> void checkIfPlayerWon(T player) {
+        if (player.getHand().isEmpty()) {
+            System.out.println(player.getName() + " has won the game!");
+            System.exit(0);
+        }
     }
 }

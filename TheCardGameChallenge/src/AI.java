@@ -1,35 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
-public class AI implements PlayerInterface {
-    private final String name;
-    private int score;
-    private List<Card> hand;
-    private List<Integer> scoreHistory;
+public class AI extends User implements PlayerInterface {
 
     public AI(String name) {
-        this.name = name;
-        this.hand = new ArrayList<>();
-        this.scoreHistory = new ArrayList<>();
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getScore() {
-        return this.score;
-    }
-
-    @Override
-    public void setInitialHand(List<Card> deck) {
-        this.hand = deck.subList(0, 7);
-        deck.subList(0,7).clear();
-    }
-
-    public List<Card> getHand() {
-        return this.hand;
+        super(name);
     }
 
     @Override
@@ -77,23 +52,21 @@ public class AI implements PlayerInterface {
     }
 
     @Override
-    public void playCard(int position) {
-        ListIterator<Card> iterator = this.hand.listIterator();
-        while (iterator.hasNext()) {
-            var card = iterator.next();
-            if (iterator.nextIndex() == position) {
-                System.out.println("You played: " + card);
-                iterator.remove();
-                return;
-            }
-        }
+    public Card playCard(int position) {
+        return null;
     }
 
-    public List<Integer> getScoreHistory() {
-        return this.scoreHistory;
-    }
+//    @Override
+//    public Card playCard(int position) {
+//        var iterator = this.getHand().listIterator();
+//        while (iterator.hasNext()) {
+//            var card = iterator.next();
+//            if (iterator.nextIndex() == position) {
+//                System.out.println("You played: " + card);
+//                iterator.remove();
+//                return;
+//            }
+//        }
+//    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 }

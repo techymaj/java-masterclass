@@ -49,13 +49,14 @@ public class Deck {
         var set = 0;
 
         for (var card : deckOfCards) {
-            System.out.printf("%-8s", card);
+            System.out.printf("%-10s", card);
             set++;
             if (set == rowsToPrint) {
                 System.out.println();
                 set = 0;
             }
         }
+        System.out.println();
     }
 
     public static void printDeck(String description, List<Card> deckOfCards) {
@@ -74,5 +75,6 @@ public class Deck {
                 set = 0;
             }
         }
+        System.out.println();
     }
 }

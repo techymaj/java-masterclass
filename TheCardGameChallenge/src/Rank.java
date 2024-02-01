@@ -60,10 +60,10 @@ public enum Rank implements IsClassic {
             return Rank.TEN;
         }
     },
-    JACK(11) {
+    JAY(11) {
         @Override
         public Rank isClassic() {
-            return Rank.JACK;
+            return Rank.JAY;
         }
     },
     QUEEN(12) {
@@ -78,7 +78,7 @@ public enum Rank implements IsClassic {
             return Rank.KING;
         }
     },
-    ACE(30) {
+    ACE(15) {
         @Override
         public Rank isClassic() {
             return Rank.ACE;
