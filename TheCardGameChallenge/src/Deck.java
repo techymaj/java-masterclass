@@ -17,9 +17,9 @@ public class Deck {
         return this.cards;
     }
 
-    public static List<Card> createDeck(boolean isCLASSIC) {
+    public static ArrayList<Card> createDeck(boolean isCLASSIC) {
         var deck = new Deck(isCLASSIC);
-        var deckOfCards = deck.cards;
+        var deckOfCards = new ArrayList<>(deck.getCards());
 
         for (int rank = 0; rank <= 12; rank++) {
             deckOfCards.add(new Card(Face.getFace(rank),Suit.HEARTS, Rank.values()[rank]));
@@ -27,14 +27,13 @@ public class Deck {
             deckOfCards.add(new Card(Face.getFace(rank),Suit.CLUBS, Rank.values()[rank]));
             deckOfCards.add(new Card(Face.getFace(rank),Suit.DIAMONDS, Rank.values()[rank]));
         }
+        if (isCLASSIC) {
+            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_F, Rank.values()[13]));
+            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_M, Rank.values()[13]));
+        }
 
         return deckOfCards;
     }
-
-//    public static void shuffle() {
-//        var shuffleDeck = new ArrayList<>(List.of(getCards()));
-//        Collections.shuffle(shuffleDeck);
-//    }
 
     public static void printDeck(String description, List<Card> deckOfCards, int rowCount) {
         System.out.println();

@@ -1,6 +1,7 @@
-import Exceptions.NotInClassicModeException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,8 +24,9 @@ public class Main {
             return;
         }
 
-        var deck = Deck.createDeck(true);
+        var deck = Deck.createDeck(Rules.isCLASSIC);
         Deck.printDeck("Deck of Cards", deck, 4);
+        System.out.println("Size of deck: " + deck.size());
 
         System.out.println("Enter your player name");
         String playerName = scanner.nextLine();
@@ -32,34 +34,25 @@ public class Main {
         System.out.println();
         System.out.println("You are now playing with the A.I");
 
-        var player = new Player(playerName);
-        var AI = new AI("AI");
-
         System.out.println("Shuffling deck...");
         Collections.shuffle(deck);
 
+        var player = new Player(playerName);
+        var AI = new AI("AI");
+
         System.out.println("Dealing cards...");
-        var playerHand = new ArrayList<>(player.getHand(deck));
-        var aiHand = new ArrayList<>(AI.getHand(deck));
+        player.setInitialHand(deck);
+        AI.setInitialHand(deck);
+        Deck.printDeck("Current deck", deck, 4);
+        System.out.println("Size of deck: " + deck.size());
+        System.out.println("Woman Dancing: "); // Woman Dancing emoji
+        System.out.println("Man Dancing: \uD83D\uDD7A");
 
-        List<Card> pile = new ArrayList<>();
+        gameInSession(player, AI, deck);
 
-        System.out.println("Your hand: " + playerHand);
+    }
 
-        player.playCard(playerHand, 0);
-
-        System.out.println("You played: " + playerHand.get(0));
-        pile.add(playerHand.get(0));
-        getPile(pile);
-
-        Random random = new Random();
-        int randomCard = random.nextInt(0, (aiHand.size()));
-        System.out.println("A.I played: " + aiHand.get(randomCard));
-        pile.add(aiHand.get(randomCard));
-        getPile(pile);
-
-        System.out.println("Your hand: " + playerHand);
-
+    private static void gameInSession(Player player, AI ai, ArrayList<Card> deck) {
     }
 
     public static void getPile(List<Card> pile) {

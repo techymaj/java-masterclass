@@ -12,7 +12,7 @@ public enum Face {
     QUEEN("Q"),
     KING("K"),
     ACE("A"),
-    KIZIKIZA("Kizikiza"),
+//    KIZIKIZA("Kizikiza"),
     JOKER("Joker");
 
     private final String face;

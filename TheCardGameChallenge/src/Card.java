@@ -18,6 +18,6 @@ public record Card(
 
     @Override
     public String toString() {
-        return face.getFace() + (char) this.suit.getAscii() + "(" + this.rank.getRank() + ")";
+        return face.getFace() + this.suit.getUnicode() + "(" + this.rank.getRank() + ")";
     }
 }
