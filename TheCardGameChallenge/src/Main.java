@@ -82,7 +82,7 @@ public class Main {
                 pickCount++;
                 continue;
 
-            } else if (input.isEmpty()) {
+            } else if (input.equalsIgnoreCase("pass")) {
                 System.out.println("You passed your turn");
                 break; // pass turn
             } else {
@@ -159,9 +159,9 @@ public class Main {
                 card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
         if (pickCount == 0) {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
+            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or 'pass' to pass turn");
         } else {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or enter to pass turn");
+            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or 'pass' to pass turn");
         }
     }
 
