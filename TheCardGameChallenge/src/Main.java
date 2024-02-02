@@ -145,9 +145,13 @@ public class Main {
 
     private static void playerChoosesAction(Player player, int pickCount) {
         System.out.println("Your turn");
-        System.out.println("Your hand: " + player.getHand());
+        var getHand = player.getHand();
+        System.out.print("Your hand: ");
+        getHand.forEach(
+                card -> System.out.print("(" + (getHand.indexOf(card) + 1) +")" + " -> " + card + " ")
+        );
         if (pickCount == 0) {
-            System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
+            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
         } else {
             System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or enter to pass turn");
         }
