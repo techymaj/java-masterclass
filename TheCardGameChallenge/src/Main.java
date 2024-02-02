@@ -61,16 +61,25 @@ public class Main {
         do {
             getPile(pile);
             // Player's turn
+            var pickCount = 0;
             while (true) {
                 System.out.println("Your turn");
                 System.out.println("Your hand: " + player.getHand());
-                System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck");
+                if (pickCount == 0) {
+                    System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
+                }
+                else {
+                    System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or enter to pass turn");
+                }
                 var input = scanner.nextLine();
                 if (input.equals("p")) {
                     var cardToPick = UserInterface.pickCard(deck);
                     player.getHand().add(cardToPick);
                     System.out.println("You picked: " + cardToPick);
-                    System.out.println("Your hand: " + player.getHand());
+                    pickCount++;
+                    continue;
+                } else if (input.isEmpty()) {
+                    break; // pass turn
                 } else {
                     try {
                         var chosenCard = Integer.parseInt(input);
@@ -88,12 +97,8 @@ public class Main {
                         System.out.println("Invalid input");
                         continue;
                     }
-
                 }
                 break;
-//                scanner.nextInt();
-
-
             }
 
             // AI's turn (if player successfully played a card)
@@ -201,8 +206,8 @@ public class Main {
             user.setScore(scoreCount);
             user.setScoreHistory();
             System.out.println(user.getName() + " has won the game!");
-            System.out.println("Score: " + user.getScore());
-            System.out.println("Score history: " + user.getScoreHistory());
+            System.out.println(user.getName() + "'s score: " + user.getScore());
+            System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
             EXIT_GAME = true;
         }
     }

@@ -19,11 +19,27 @@ public class AI extends User {
 
         // If no valid card found in hand, pick a card from the deck
         System.out.println("AI is thinking...");
-        var cardToPlay = UserInterface.pickCard(Main.deck);
-        this.getHand().add(cardToPlay);
-        System.out.println(this.getName() + " picked a card from the deck: " + cardToPlay);
+        var pickedCard = UserInterface.pickCard(Main.deck);
+        this.getHand().add(pickedCard);
+        System.out.println(this.getName() + " picked a card from the deck");
 
-        return null;
+        if (Main.isValidCard(this, pickedCard, Main.pile)) {
+            System.out.println(this.getName() + " picked and played");
+            return pickedCard;
+        }
+
+//        if (pickCount == 2) {
+//            this.pickTwoCards(Main.deck);
+//        }
+//
+//        if (pickCount == 3) {
+//            this.pickThreeCards(Main.deck);
+//        }
+//
+//        if (pickCount == 5) {
+//            this.pickFiveCards(Main.deck);
+//        }
+
+        return null; // pass turn
     }
-
 }
