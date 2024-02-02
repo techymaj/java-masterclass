@@ -42,6 +42,8 @@ public class Main {
         var player = new Player(playerName);
         var AI = new AI("AI");
 
+
+
         System.out.println("Dealing cards...");
         player.setInitialHand(deck);
         AI.setInitialHand(deck);
@@ -186,9 +188,16 @@ public class Main {
 //        }
 //    }
 
-    public static <T extends User> void checkIfPlayerWon(T player) {
-        if (player.getHand().isEmpty()) {
-            System.out.println(player.getName() + " has won the game!");
+    public static <T extends User> void checkIfPlayerWon(T user) {
+
+        if (user.getHand().isEmpty()) {
+            var scoreCount = user.getScore();
+            scoreCount++;
+            user.setScore(scoreCount);
+            user.setScoreHistory();
+            System.out.println(user.getName() + " has won the game!");
+            System.out.println("Score: " + user.getScore());
+            System.out.println("Score history: " + user.getScoreHistory());
             EXIT_GAME = true;
         }
     }

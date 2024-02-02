@@ -4,7 +4,7 @@ import java.util.List;
 public class User implements UserInterface {
 
     private final String name;
-    private final List<Integer> scoreHistory;
+    private List<Integer> scoreHistory;
     private ArrayList<Card> hand;
     private int score;
 
@@ -35,6 +35,10 @@ public class User implements UserInterface {
 
     public List<Integer> getScoreHistory() {
         return this.scoreHistory;
+    }
+
+    public void setScoreHistory() {
+        this.scoreHistory.add(this.score);
     }
 
     public void setScore(int score) {
