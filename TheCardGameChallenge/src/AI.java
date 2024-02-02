@@ -1,73 +1,29 @@
-import java.util.ArrayList;
-import java.util.List;
-
-public class AI extends User implements PlayerInterface {
+public class AI extends User {
 
     public AI(String name) {
         super(name);
     }
 
-    @Override
-    public Card pickCard(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.get(0);
-        deck.remove(0);
-        return cardToPick;
-    }
-
-    @Override
-    public List<Card> pickTwoCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 2);
-        deck.subList(0, 2).clear();
-        return cardToPick;
-    }
-
-    @Override
-    public List<Card> pickThreeCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 3);
-        deck.subList(0, 3).clear();
-        return cardToPick;
-    }
-
-    @Override
-    public List<Card> pickFiveCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 5);
-        deck.subList(0, 5).clear();
-        return cardToPick;
-    }
-
-    @Override
-    public Card playCard(int position) {
-        var iterator = this.getHand().listIterator();
-        var cardToPlay = this.getHand().get(position - 1);
+    public Card playCard() {
+        var iterator = this.getHand().iterator();
 
         while (iterator.hasNext()) {
             var card = iterator.next();
-            if (card.equals(cardToPlay)) {
-                if (Main.isValidCard(this, cardToPlay, Main.pile)) {
-                    System.out.println(this.getName() + " played: " + card);
-                    iterator.remove();
-                } else {
-                    System.out.println("AI is thinking...");
-                }
+
+            if (Main.isValidCard(this, card, Main.pile)) {
+                System.out.println(this.getName() + " played: " + card);
+                iterator.remove();
+                return card;
             }
         }
 
+        // If no valid card found in hand, pick a card from the deck
+        System.out.println("AI is thinking...");
+        var cardToPlay = UserInterface.pickCard(Main.deck);
+        this.getHand().add(cardToPlay);
+        System.out.println(this.getName() + " picked a card from the deck: " + cardToPlay);
+
         return cardToPlay;
     }
+
 }

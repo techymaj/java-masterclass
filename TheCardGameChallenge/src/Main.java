@@ -3,6 +3,7 @@ import java.util.*;
 public class Main {
     public static boolean EXIT_GAME = false;
     public static ArrayList<Card> pile = new ArrayList<>();
+    public static ArrayList<Card> deck;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -24,7 +25,7 @@ public class Main {
             return;
         }
 
-        var deck = Deck.createDeck(Rules.isCLASSIC);
+        deck = Deck.createDeck(Rules.isCLASSIC);
         Deck.printDeck("Deck of Cards", deck, 4);
         System.out.println("Size of deck: " + deck.size());
 
@@ -54,7 +55,6 @@ public class Main {
 
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
         var scanner = new Scanner(System.in);
-        var random = new Random();
 
         do {
             getPile(pile);
@@ -62,30 +62,48 @@ public class Main {
             while (true) {
                 System.out.println("Your turn");
                 System.out.println("Your hand: " + player.getHand());
-                System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ")");
-                var position = scanner.nextInt();
-                var playedCard = player.playCard(position);
-                var isValidCard = isValidCard(player, playedCard, pile);
-                if (!isValidCard) {
-                    continue;
+                System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck");
+                var input = scanner.nextLine();
+                if (input.equals("p")) {
+                    var cardToPick = UserInterface.pickCard(deck);
+                    player.getHand().add(cardToPick);
+                    System.out.println("You picked: " + cardToPick);
+                    System.out.println("Your hand: " + player.getHand());
+                } else {
+                    try {
+                        var chosenCard = Integer.parseInt(input);
+                        var cardPlayed = player.playCard(chosenCard);
+                        var isValidCard = isValidCard(player, cardPlayed, pile);
+                        if (!isValidCard) {
+                            getPile(pile);
+                            continue;
+                        }
+                        System.out.println(player.getName() + "'s remaining cards " + player.getHand().size());
+                        addToPile(player, cardPlayed, pile);
+                        checkIfPlayerWon(player);
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input");
+                        continue;
+                    }
+
                 }
-                addToPile(player, playedCard, pile);
-                checkIfPlayerWon(player);
                 break;
+//                scanner.nextInt();
+
+
             }
 
             // AI's turn (if player successfully played a card)
             while (true) {
                 System.out.println("AI's turn");
-                random = new Random();
-                var randomNum = random.nextInt(0, ai.getHand().size() - 1);
-//                System.out.println("A.I played card at position: " + randomNum);
-                var cardPlayed = ai.playCard(randomNum + 1);
-                System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
+                var cardPlayed = ai.playCard();
                 var isValidCard = isValidCard(ai, cardPlayed, pile);
                 if (!isValidCard) {
+                    getPile(pile);
                     continue;
                 }
+                System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
                 addToPile(player, cardPlayed, pile);
                 checkIfPlayerWon(ai);
                 break;
@@ -93,6 +111,11 @@ public class Main {
 
         } while (!EXIT_GAME);
     }
+
+//    public static <T extends User> void pickCardFromDeck(T user, ArrayList<Card> deck) {
+//        var cardToPick = user.pickCard(deck);
+//        user.getHand().add(cardToPick);
+//    }
 
 
     public static void getPile(List<Card> pile) {

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements UserInterface {
 
     private final String name;
     private final List<Integer> scoreHistory;
@@ -60,5 +60,35 @@ public class User {
         }
 
         return cardToPlay;
+    }
+
+    public List<Card> pickTwoCards(ArrayList<Card> deck) {
+        if (deck.isEmpty()) {
+            System.out.println("There is nothing left in the deck");
+            return null;
+        }
+        var cardToPick = deck.subList(0, 2);
+        deck.subList(0, 2).clear();
+        return cardToPick;
+    }
+
+    public List<Card> pickThreeCards(ArrayList<Card> deck) {
+        if (deck.isEmpty()) {
+            System.out.println("There is nothing left in the deck");
+            return null;
+        }
+        var cardToPick = deck.subList(0, 3);
+        deck.subList(0, 3).clear();
+        return cardToPick;
+    }
+
+    public List<Card> pickFiveCards(ArrayList<Card> deck) {
+        if (deck.isEmpty()) {
+            System.out.println("There is nothing left in the deck");
+            return null;
+        }
+        var cardToPick = deck.subList(0, 5);
+        deck.subList(0, 5).clear();
+        return cardToPick;
     }
 }
