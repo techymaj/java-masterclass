@@ -148,7 +148,7 @@ public class Main {
         var getHand = player.getHand();
         System.out.print("Your hand: ");
         getHand.forEach(
-                card -> System.out.print("(" + (getHand.indexOf(card) + 1) +")" + " -> " + card + " ")
+                card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) +")" + " ")
         );
         if (pickCount == 0) {
             System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
