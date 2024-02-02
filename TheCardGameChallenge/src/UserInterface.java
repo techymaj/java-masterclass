@@ -13,7 +13,6 @@ public interface UserInterface {
     //    Card playCard(int position);
     static Card pickCard(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
             return null;
         }
         var cardToPick = deck.get(0);
