@@ -86,20 +86,20 @@ public class Main {
                 System.out.println("You passed your turn");
                 break; // pass turn
             } else {
-                var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
-                var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
-                var enteredNumberIsWrong = numberIsGreaterThanHandSize || numberIsLessThanHandSize;
-                if (enteredNumberIsWrong) {
-                    System.out.println("Wrong card position. Try again");
-                    continue;
-                } else {
-                    try {
-                        if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input");
+                try {
+                    var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
+                    var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
+                    var enteredNumberIsWrong = numberIsGreaterThanHandSize || numberIsLessThanHandSize;
+                    if (enteredNumberIsWrong) {
+                        System.out.println("Wrong card position. Try again");
                         continue;
                     }
+                } catch (NumberFormatException nfe) {
+                    System.out.println("Invalid input. Try again");
+                    continue;
                 }
+
+                if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
             }
             break;
         }
@@ -151,12 +151,12 @@ public class Main {
         return false;
     }
 
-     static void playerChoosesAction(Player player, int pickCount) {
+    static void playerChoosesAction(Player player, int pickCount) {
         System.out.println("Your turn");
         var getHand = player.getHand();
         System.out.print("Your hand: ");
         getHand.forEach(
-                card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) +")" + " ")
+                card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
         if (pickCount == 0) {
             System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
