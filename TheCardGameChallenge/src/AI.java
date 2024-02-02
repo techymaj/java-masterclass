@@ -1,5 +1,3 @@
-import java.util.Collections;
-
 public class AI extends User {
 
     public AI(String name) {
@@ -32,16 +30,7 @@ public class AI extends User {
                 return pickedCard;
             }
         } catch (NullPointerException e) {
-            System.out.println("There is nothing left in the deck");
-            var getLastCard = Main.pile.get(Main.pile.size() - 1);
-            System.out.println("Shuffling the pile...");
-            Collections.shuffle(Main.pile);
-            Main.pile.remove(getLastCard);
-            Main.deck.addAll(Main.pile);
-            Main.pile.clear();
-            System.out.println("Pile shuffled and added to the deck");
-            Main.pile.add(getLastCard);
-            Deck.printDeck("Current pile", Main.pile, 1);
+            Main.reshuffleDeckAndContinuePlaying();
             // try to pick a card from the deck again
             return this.playCard();
         }

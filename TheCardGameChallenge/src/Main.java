@@ -42,16 +42,12 @@ public class Main {
         var player = new Player(playerName);
         var AI = new AI("AI");
 
-
         System.out.println("Dealing cards...");
         player.setInitialHand(deck);
         AI.setInitialHand(deck);
-        Deck.printDeck("Current deck", deck, 4);
         System.out.println("Size of deck: " + deck.size());
 
-
         gameInSession(player, AI, deck, pile);
-
     }
 
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
@@ -65,7 +61,6 @@ public class Main {
     }
 
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
-        // Player's turn
         var pickCount = 0;
         while (true) {
             playerChoosesAction(player, pickCount);
@@ -78,26 +73,15 @@ public class Main {
                     pickCount++;
                     continue;
                 } catch (NullPointerException e) {
-                    System.out.println("There is nothing left in the deck");
-                    var getLastCard = Main.pile.get(Main.pile.size() - 1);
-                    System.out.println("Shuffling the pile...");
-                    Collections.shuffle(Main.pile);
-                    Main.pile.remove(getLastCard);
-                    Main.deck.addAll(Main.pile);
-                    Main.pile.clear();
-                    System.out.println("Pile shuffled and added to the deck");
-                    Main.pile.add(getLastCard);
-                    Deck.printDeck("Current pile", Main.pile, 1);
+                    reshuffleDeckAndContinuePlaying();
                     continue;
                 }
-
             } else if (input.isEmpty()) {
                 System.out.println("You passed your turn");
                 break; // pass turn
             } else {
                 try {
                     if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
-
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input");
                     continue;
@@ -105,6 +89,19 @@ public class Main {
             }
             break;
         }
+    }
+
+    static void reshuffleDeckAndContinuePlaying() {
+        System.out.println("There is nothing left in the deck");
+        var getLastCard = Main.pile.get(Main.pile.size() - 1);
+        System.out.println("Shuffling the pile...");
+        Collections.shuffle(Main.pile);
+        Main.pile.remove(getLastCard);
+        Main.deck.addAll(Main.pile);
+        Main.pile.clear();
+        System.out.println("Pile shuffled and added to the deck");
+        Main.pile.add(getLastCard);
+        Deck.printDeck("Current pile", Main.pile, 1);
     }
 
     private static void aI_s_Turn(AI ai, ArrayList<Card> pile) {
@@ -152,6 +149,9 @@ public class Main {
 
     public static void getPile(List<Card> pile) {
         Deck.printDeck("Current pile", pile, 4);
+        System.out.println("-".repeat(10));
+        System.out.println("Last played card: " + pile.get(pile.size() - 1));
+        System.out.println("-".repeat(10));
     }
 
     public static <T extends User> void addToPile(T user, Card card, ArrayList<Card> pile) {
