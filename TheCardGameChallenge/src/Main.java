@@ -65,7 +65,7 @@ public class Main {
         while (true) {
             playerChoosesAction(player, pickCount);
             var input = scanner.nextLine();
-            if (input.equals("p")) {
+            if (input.equalsIgnoreCase("p")) {
 
                 var cardToPick = UserInterface.pickCard(deck);
                 if (cardToPick == null) {
