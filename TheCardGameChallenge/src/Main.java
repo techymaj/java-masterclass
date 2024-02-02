@@ -1,4 +1,8 @@
-import java.util.*;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static boolean EXIT_GAME = false;
@@ -216,7 +220,20 @@ public class Main {
             scoreCount++;
             user.setScore(scoreCount);
             user.setScoreHistory();
-            System.out.println(user.getName() + " has won the game!");
+            // add confetti
+            if (user instanceof Player) {
+                System.out.println("You won the game!");
+                JFrame frame = new JFrame();
+                ImageIcon icon = new ImageIcon("agt.gif");
+                JLabel label = new JLabel(icon);
+                frame.add(label);
+                frame.setDefaultCloseOperation
+                        (JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+            } else {
+                System.out.println(user.getName() + " won the game!");
+            }
             System.out.println(user.getName() + "'s score: " + user.getScore());
             System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
             EXIT_GAME = true;
