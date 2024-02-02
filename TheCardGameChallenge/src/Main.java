@@ -86,11 +86,19 @@ public class Main {
                 System.out.println("You passed your turn");
                 break; // pass turn
             } else {
-                try {
-                    if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input");
+                var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
+                var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
+                var enteredNumberIsWrong = numberIsGreaterThanHandSize || numberIsLessThanHandSize;
+                if (enteredNumberIsWrong) {
+                    System.out.println("Wrong card position. Try again");
                     continue;
+                } else {
+                    try {
+                        if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input");
+                        continue;
+                    }
                 }
             }
             break;
@@ -143,7 +151,7 @@ public class Main {
         return false;
     }
 
-    private static void playerChoosesAction(Player player, int pickCount) {
+     static void playerChoosesAction(Player player, int pickCount) {
         System.out.println("Your turn");
         var getHand = player.getHand();
         System.out.print("Your hand: ");

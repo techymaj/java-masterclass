@@ -7,7 +7,7 @@ public class Player extends User {
     @Override
     public Card playCard(int position) {
         var iterator = this.getHand().listIterator();
-        var cardToPlay = getCardToPlayInThis(position);
+        var cardToPlay = this.getHand().get(position - 1);
 
         while (iterator.hasNext()) {
             var card = iterator.next();
@@ -20,16 +20,5 @@ public class Player extends User {
         }
 
         return cardToPlay;
-    }
-
-    private Card getCardToPlayInThis(int position) {
-        Card card;
-        try {
-            card = this.getHand().get(position - 1);
-            return card;
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Wrong card position. Try Again");
-            return this.getCardToPlayInThis(position);
-        }
     }
 }
