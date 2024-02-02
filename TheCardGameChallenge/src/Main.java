@@ -66,16 +66,18 @@ public class Main {
             playerChoosesAction(player, pickCount);
             var input = scanner.nextLine();
             if (input.equals("p")) {
-                try {
-                    var cardToPick = UserInterface.pickCard(deck);
-                    player.getHand().add(cardToPick);
-                    System.out.println("You picked: " + cardToPick);
-                    pickCount++;
-                    continue;
-                } catch (NullPointerException e) {
+
+                var cardToPick = UserInterface.pickCard(deck);
+                if (cardToPick == null) {
                     reshuffleDeckAndContinuePlaying();
                     continue;
                 }
+
+                player.getHand().add(cardToPick);
+                System.out.println("You picked: " + cardToPick);
+                pickCount++;
+                continue;
+
             } else if (input.isEmpty()) {
                 System.out.println("You passed your turn");
                 break; // pass turn
@@ -149,13 +151,13 @@ public class Main {
 
     public static void getPile(List<Card> pile) {
         Deck.printDeck("Current pile", pile, 4);
-        System.out.println("-".repeat(10));
+        System.out.println("-".repeat(20));
         if (!pile.isEmpty()) {
             System.out.println("Last played card: " + pile.get(pile.size() - 1));
         } else {
             System.out.println("Pile is empty");
         }
-        System.out.println("-".repeat(10));
+        System.out.println("-".repeat(20));
     }
 
     public static <T extends User> void addToPile(T user, Card card, ArrayList<Card> pile) {
