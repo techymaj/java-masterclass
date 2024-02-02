@@ -150,7 +150,11 @@ public class Main {
     public static void getPile(List<Card> pile) {
         Deck.printDeck("Current pile", pile, 4);
         System.out.println("-".repeat(10));
-        System.out.println("Last played card: " + pile.get(pile.size() - 1));
+        if (!pile.isEmpty()) {
+            System.out.println("Last played card: " + pile.get(pile.size() - 1));
+        } else {
+            System.out.println("Pile is empty");
+        }
         System.out.println("-".repeat(10));
     }
 
