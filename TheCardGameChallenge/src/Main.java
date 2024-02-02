@@ -106,7 +106,9 @@ public class Main {
                     continue;
                 }
                 System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
-                addToPile(player, cardPlayed, pile);
+                if (cardPlayed != null) {
+                    addToPile(ai, cardPlayed, pile);
+                }
                 checkIfPlayerWon(ai);
                 break;
             }
@@ -130,6 +132,9 @@ public class Main {
     }
 
     public static <T extends User> boolean isValidCard(T user, Card card, ArrayList<Card> pile) {
+        if (card == null) {
+            return true;
+        }
         if (pile.isEmpty()) {
             return true; // Any card can be played if the pile is empty
         } else {

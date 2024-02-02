@@ -23,7 +23,7 @@ public class AI extends User {
         this.getHand().add(cardToPlay);
         System.out.println(this.getName() + " picked a card from the deck: " + cardToPlay);
 
-        return cardToPlay;
+        return null;
     }
 
 }
