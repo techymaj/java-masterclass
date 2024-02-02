@@ -43,7 +43,6 @@ public class Main {
         var AI = new AI("AI");
 
 
-
         System.out.println("Dealing cards...");
         player.setInitialHand(deck);
         AI.setInitialHand(deck);
@@ -67,8 +66,7 @@ public class Main {
                 System.out.println("Your hand: " + player.getHand());
                 if (pickCount == 0) {
                     System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or enter to pass turn");
-                }
-                else {
+                } else {
                     System.out.println("Enter the position of the card you want to play (1 - " + player.getHand().size() + ") or enter to pass turn");
                 }
                 var input = scanner.nextLine();
@@ -145,10 +143,27 @@ public class Main {
         } else {
             var previousFace = pile.get(pile.size() - 1).face();
             var currentFace = card.face();
+
             var previousSuit = pile.get(pile.size() - 1).suit();
             var currentSuit = card.suit();
 
-            return currentFace.equals(previousFace) || currentSuit.equals(previousSuit);
+            var isJoker_F = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_F);
+            var isJoker_M = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_M);
+
+            if (isJoker_F) {
+                if (currentSuit.equals(Suit.HEARTS) || currentSuit.equals(Suit.DIAMONDS)) {
+                    return true;
+                }
+            }
+
+            if (isJoker_M) {
+                if (currentSuit.equals(Suit.SPADES) || currentSuit.equals(Suit.CLUBS)) {
+                    return true;
+                }
+            }
+
+            return currentFace.equals(previousFace) ||
+                    currentSuit.equals(previousSuit);
         }
     }
 

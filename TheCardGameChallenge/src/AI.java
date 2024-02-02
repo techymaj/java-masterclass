@@ -25,6 +25,7 @@ public class AI extends User {
 
         if (Main.isValidCard(this, pickedCard, Main.pile)) {
             System.out.println(this.getName() + " picked and played");
+            this.getHand().remove(pickedCard);
             return pickedCard;
         }
 
