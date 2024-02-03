@@ -8,6 +8,7 @@ public class Main {
     public static boolean playAgain = true;
     public static ArrayList<Card> pile = new ArrayList<>();
     public static ArrayList<Card> deck;
+    public static int passCount = 0;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -101,11 +102,18 @@ public class Main {
                 player.getHand().add(cardToPick);
                 System.out.println("You picked: " + cardToPick);
                 pickCount++;
+                passCount = 0; // now you can pass
                 continue;
 
             } else if (input.equalsIgnoreCase("pass")) {
-                System.out.println("You passed your turn");
-                break; // pass turn
+                if (passCount == 0) {
+                    passCount++; // You can't pass until you pick a card or play one
+                    System.out.println("You passed your turn");
+                    break;
+                } else {
+                    System.out.println("You can't pass without picking a card or playing one. Try again");
+                    continue;
+                }
             } else {
                 try {
                     var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
@@ -152,6 +160,7 @@ public class Main {
             System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
             if (cardPlayed != null) {
                 addToPile(ai, cardPlayed, pile);
+                passCount++; // Opponent can't pass until a card is picked or played
             }
             checkIfPlayerWon(ai);
             break;
@@ -168,6 +177,7 @@ public class Main {
         }
         System.out.println(player.getName() + "'s remaining cards " + player.getHand().size());
         addToPile(player, cardPlayed, pile);
+        passCount = 0;
         checkIfPlayerWon(player);
         return false;
     }
@@ -180,9 +190,9 @@ public class Main {
                 card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
         if (pickCount == 0) {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or 'pass' to pass turn");
+            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or 'pass' to pass your turn");
         } else {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or 'pass' to pass turn");
+            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or 'pass' to your pass turn");
         }
     }
 
