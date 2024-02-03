@@ -1,5 +1,7 @@
 public class Player extends User {
 
+    public static final String PLAYER_NAME = "Player";
+
     public Player(String name) {
         super(name);
     }

@@ -15,11 +15,6 @@ public class Main {
         System.out.println();
 
         var scanner = setGameMode();
-        do {
-            if (scanner != null) {
-                break;
-            }
-        } while (true);
 
         deck = Deck.createDeck(Rules.isCLASSIC);
         Deck.printDeck("Deck of Cards", deck, 4);

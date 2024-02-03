@@ -1,4 +1,5 @@
 public class AI extends User {
+    public static final String AI_NAME = "AI";
 
     public AI(String name) {
         super(name);
