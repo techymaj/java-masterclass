@@ -10,8 +10,8 @@ public class Game {
     public static boolean EXIT_GAME = false;
     public static ArrayList<Card> pile = new ArrayList<>();
     public static ArrayList<Card> deck;
-    public static int passCount = 0;
-    public static int pickCount = 0;
+    public static boolean playerCanPassAfterPickingOrPlayingCard = true;
+    public static boolean playerCanPickCardFromDeck = true;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -110,12 +110,12 @@ public class Game {
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
 
         do {
-            playerChoosesAction(player, pickCount);
+            playerChoosesAction(player, playerCanPickCardFromDeck);
             var input = scanner.nextLine();
             var inputIsPickCard = input.equalsIgnoreCase("p");
 
-            if (inputIsPickCard && pickCount == 1) {
-                System.out.println("You can't pick a card without playing one. Try again");
+            if (inputIsPickCard && !playerCanPickCardFromDeck) {
+                System.out.println("Pass your turn or play a card. Try again");
                 continue;
             }
             if (inputIsPickCard) {
@@ -124,7 +124,7 @@ public class Game {
             } else {
                 var inputIsPass = input.equalsIgnoreCase("pass");
                 if (inputIsPass) {
-                    if (passCount == 0) {
+                    if (playerCanPassAfterPickingOrPlayingCard) {
                         enforcePassRule();
                         System.out.println("You passed your turn");
                         break;
@@ -141,13 +141,15 @@ public class Game {
     }
 
     private static void enforcePassRule() {
-        passCount++; // player can't pass until you pick a card or play one
-        pickCount = 0; // reset pick count for player
+        // TODO: Remove comments
+        playerCanPassAfterPickingOrPlayingCard = false; // player can't pass until a card is picked or played
+        playerCanPickCardFromDeck = true; // reset pick count for player
     }
 
     private static void enforcePickRule() {
-        passCount = 0; // player can pass
-        pickCount++; // player can't pick twice
+        // TODO: Remove comments
+        playerCanPickCardFromDeck = false; // player can't pick twice
+        playerCanPassAfterPickingOrPlayingCard = true; // player can pass
     }
 
     private static void pickCard(Player player, ArrayList<Card> deck) {
@@ -194,7 +196,6 @@ public class Game {
 
     private static void aI_s_Turn(AI ai, ArrayList<Card> pile) {
         enforcePassRule();
-        // AI's turn (if player successfully played a card)
         while (true) {
             System.out.println("AI's turn");
             var cardPlayed = ai.playCard();
@@ -225,19 +226,19 @@ public class Game {
         }
         System.out.println(player.getName() + "'s remaining cards " + player.getHand().size());
         addToPile(cardPlayed, pile);
-        passCount = 0;
+        playerCanPassAfterPickingOrPlayingCard = false;
         checkIfPlayerWon(player);
         return false;
     }
 
-    static void playerChoosesAction(Player player, int pickCount) {
-        System.out.println("Your turn");
+    static void playerChoosesAction(Player player, boolean playerCanPickCardFromDeck) {
+        System.out.println("It's your turn");
         var getHand = player.getHand();
         System.out.print("Your hand: ");
         getHand.forEach(
                 card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
-        if (pickCount == 0) {
+        if (!playerCanPickCardFromDeck) {
             System.out.println("\nEnter the position of the card you want to play " +
                     "(1 - " + player.getHand().size() + ") " +
                     "or p to pick a card from the deck or 'pass' to pass your turn");
