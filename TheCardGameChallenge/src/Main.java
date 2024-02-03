@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Main {
     public static boolean EXIT_GAME = false;
+    public static boolean playAgain = true;
     public static ArrayList<Card> pile = new ArrayList<>();
     public static ArrayList<Card> deck;
 
@@ -50,7 +51,9 @@ public class Main {
         AI.setInitialHand(deck);
         System.out.println("Size of deck: " + deck.size());
 
-        gameInSession(player, AI, deck, pile);
+        if (playAgain) {
+            gameInSession(player, AI, deck, pile);
+        }
     }
 
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
@@ -61,6 +64,25 @@ public class Main {
             player_s_Turn(player, deck, pile, scanner);
             aI_s_Turn(ai, pile);
         } while (!EXIT_GAME);
+
+        restartGame(deck, pile, scanner);
+        scanner.close();
+    }
+
+    private static void restartGame(ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
+        System.out.println();
+        System.out.println("Do you want to play again? (y/n)");
+        var input = scanner.nextLine();
+        if (input.equalsIgnoreCase("y")) {
+            playAgain = true;
+            EXIT_GAME = false;
+            deck.clear();
+            pile.clear();
+//            main(null);
+        } else {
+            playAgain = false;
+            System.out.println("Thank you for playing");
+        }
     }
 
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
@@ -166,6 +188,8 @@ public class Main {
 
     public static void getPile(List<Card> pile) {
         Deck.printDeck("Current pile", pile, 4);
+        System.out.println("Pile size --> " + pile.size());
+        System.out.println("Deck size --> " + deck.size());
         System.out.println("-".repeat(25));
         if (!pile.isEmpty()) {
             System.out.println("Top of the pile: " + pile.get(pile.size() - 1));
@@ -239,6 +263,7 @@ public class Main {
             System.out.println(user.getName() + "'s score: " + user.getScore());
             System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
             EXIT_GAME = true;
+            restartGame(deck, pile, new Scanner(System.in));
         }
     }
 }
