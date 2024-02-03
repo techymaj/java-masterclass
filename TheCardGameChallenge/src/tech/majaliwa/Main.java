@@ -106,51 +106,72 @@ public class Main {
         while (true) {
             playerChoosesAction(player, pickCount);
             var input = scanner.nextLine();
-            if (input.equalsIgnoreCase("p") && pickCount == 1) {
+            var inputIsPickCard = input.equalsIgnoreCase("p");
+
+            if (inputIsPickCard && pickCount == 1) {
                 System.out.println("You can't pick a card without playing one. Try again");
                 continue;
             }
-            if (input.equalsIgnoreCase("p")) {
-                var cardToPick = UserInterface.pickCard(deck);
-                if (cardToPick == null) {
-                    reshuffleDeckAndContinuePlaying();
-                    continue;
-                }
-
-                player.getHand().add(cardToPick);
-                System.out.println("You picked: " + cardToPick);
-                pickCount++;
-                passCount = 0; // now you can pass
+            if (inputIsPickCard) {
+                pickCard(player, deck);
                 continue;
 
-            } else if (input.equalsIgnoreCase("pass")) {
-                if (passCount == 0) {
-                    passCount++; // You can't pass until you pick a card or play one
-                    pickCount = 0; // reset pick count
-                    System.out.println("You passed your turn");
-                    break;
-                } else {
-                    System.out.println("You can't pass without picking a card or playing one. Try again");
-                    continue;
-                }
             } else {
-                try {
-                    var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
-                    var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
-                    var enteredNumberIsWrong = numberIsGreaterThanHandSize || numberIsLessThanHandSize;
-                    if (enteredNumberIsWrong) {
-                        System.out.println("Wrong card position. Try again");
+                var inputIsPass = input.equalsIgnoreCase("pass");
+                if (inputIsPass) {
+                    if (passCount == 0) {
+                        enforcePassRule();
+                        System.out.println("You passed your turn");
+                        break;
+                    } else {
+                        System.out.println("You can't pass without picking a card or playing one. Try again");
                         continue;
                     }
-                } catch (NumberFormatException nfe) {
-                    System.out.println("Invalid input. Try again");
-                    continue;
+                } else {
+                    if (cardNotPlayed(player, pile, input)) continue;
                 }
-
-                if (cardIsNotPlayed(player, pile, input)) continue; // pass turn
             }
             break;
         }
+    }
+
+    private static void enforcePassRule() {
+        passCount++; // You can't pass until you pick a card or play one
+        pickCount = 0; // reset pick count
+    }
+
+    private static void pickCard(Player player, ArrayList<Card> deck) {
+        var cardToPick = UserInterface.pickCard(deck);
+        if (cardToPick == null) {
+            reshuffleDeckAndContinuePlaying();
+            return;
+        }
+
+        player.getHand().add(cardToPick);
+        System.out.println("You picked: " + cardToPick);
+        enforcePickRule();
+    }
+
+    private static void enforcePickRule() {
+        pickCount++;
+        passCount = 0; // now you can pass
+    }
+
+    private static boolean cardNotPlayed(Player player, ArrayList<Card> pile, String input) {
+        try {
+            var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
+            var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
+            var enteredNumberIsWrong = numberIsGreaterThanHandSize || numberIsLessThanHandSize;
+            if (enteredNumberIsWrong) {
+                System.out.println("Wrong card position. Try again");
+                return true;
+            }
+        } catch (NumberFormatException nfe) {
+            System.out.println("Invalid input. Try again");
+            return true;
+        }
+
+        return cardIsNotPlayed(player, pile, input);
     }
 
     static void reshuffleDeckAndContinuePlaying() {
@@ -181,8 +202,7 @@ public class Main {
             System.out.println("*".repeat(25));
             if (cardPlayed != null) {
                 addToPile(cardPlayed, pile);
-                passCount++; // Opponent can't pass until a card is picked or played
-                pickCount = 0; // reset pick count for opponent
+                enforcePassRule();
             }
             checkIfPlayerWon(ai);
             break;
