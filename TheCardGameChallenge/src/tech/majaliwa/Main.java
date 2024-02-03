@@ -137,8 +137,8 @@ public class Main {
     }
 
     private static void enforcePassRule() {
-        passCount++; // You can't pass until you pick a card or play one
-        pickCount = 0; // reset pick count
+        passCount++; // player can't pass until you pick a card or play one
+        pickCount = 0; // reset pick count for player
     }
 
     private static void pickCard(Player player, ArrayList<Card> deck) {
@@ -154,8 +154,8 @@ public class Main {
     }
 
     private static void enforcePickRule() {
-        pickCount++;
-        passCount = 0; // now you can pass
+        pickCount++; // player can't pick twice
+        passCount = 0; // player can pass
     }
 
     private static boolean cardNotPlayed(Player player, ArrayList<Card> pile, String input) {
