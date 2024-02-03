@@ -39,6 +39,7 @@ public class Main {
         System.out.println("Size of deck: " + deck.size());
 
         gameInSession(player, AI, deck, pile);
+        scanner.close();
     }
 
     private static Scanner setGameMode() {
