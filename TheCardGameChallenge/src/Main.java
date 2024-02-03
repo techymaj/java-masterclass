@@ -14,21 +14,12 @@ public class Main {
         System.out.println(Rules.WELCOME_MESSAGE);
         System.out.println();
 
-        System.out.println("Do you want to play in classic mode? (y/n) ");
-
-        Scanner scanner = new Scanner(System.in);
-        String answer = scanner.nextLine();
-
-        if (answer.equals("y")) {
-            Rules.isCLASSIC = true;
-            System.out.println(Rules.CLASSIC);
-        } else if (answer.equals("n")) {
-            Rules.isCLASSIC = false;
-            System.out.println(Rules.NOT_CLASSIC);
-        } else {
-            System.out.println("Invalid input");
-            return;
-        }
+        var scanner = setGameMode();
+        do {
+            if (scanner != null) {
+                break;
+            }
+        } while (true);
 
         deck = Deck.createDeck(Rules.isCLASSIC);
         Deck.printDeck("Deck of Cards", deck, 4);
@@ -54,6 +45,25 @@ public class Main {
 
 
             gameInSession(player, AI, deck, pile);
+    }
+
+    private static Scanner setGameMode() {
+        System.out.println("Do you want to play in classic mode? (y/n) ");
+
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.nextLine();
+
+        if (answer.equals("y")) {
+            Rules.isCLASSIC = true;
+            System.out.println(Rules.CLASSIC);
+        } else if (answer.equals("n")) {
+            Rules.isCLASSIC = false;
+            System.out.println(Rules.NOT_CLASSIC);
+        } else {
+            System.out.println("Invalid input");
+            return setGameMode();
+        }
+        return scanner;
     }
 
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
