@@ -104,9 +104,9 @@ public class Main {
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
 
         do {
+            playerChoosesAction(player, pickCount);
             var input = scanner.nextLine();
             var inputIsPickCard = input.equalsIgnoreCase("p");
-            playerChoosesAction(player, pickCount);
 
             if (inputIsPickCard && pickCount == 1) {
                 System.out.println("You can't pick a card without playing one. Try again");
