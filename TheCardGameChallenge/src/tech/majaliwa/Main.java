@@ -1,3 +1,5 @@
+package tech.majaliwa;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -169,7 +171,7 @@ public class Main {
         while (true) {
             System.out.println("AI's turn");
             var cardPlayed = ai.playCard();
-            var isValidCard = isValidCard(ai, cardPlayed, pile);
+            var isValidCard = isValidCard(cardPlayed, pile);
             if (!isValidCard) {
                 getPile(pile);
                 continue;
@@ -178,7 +180,7 @@ public class Main {
             System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
             System.out.println("*".repeat(25));
             if (cardPlayed != null) {
-                addToPile(ai, cardPlayed, pile);
+                addToPile(cardPlayed, pile);
                 passCount++; // Opponent can't pass until a card is picked or played
                 pickCount = 0; // reset pick count for opponent
             }
@@ -190,13 +192,13 @@ public class Main {
     private static boolean cardIsNotPlayed(Player player, ArrayList<Card> pile, String input) {
         var chosenCard = Integer.parseInt(input);
         var cardPlayed = player.playCard(chosenCard);
-        var isValidCard = isValidCard(player, cardPlayed, pile);
+        var isValidCard = isValidCard(cardPlayed, pile);
         if (!isValidCard) {
             getPile(pile);
             return true;
         }
         System.out.println(player.getName() + "'s remaining cards " + player.getHand().size());
-        addToPile(player, cardPlayed, pile);
+        addToPile(cardPlayed, pile);
         passCount = 0;
         checkIfPlayerWon(player);
         return false;
@@ -229,11 +231,11 @@ public class Main {
         System.out.println("-".repeat(25));
     }
 
-    public static <T extends User> void addToPile(T user, Card card, ArrayList<Card> pile) {
+    public static void addToPile(Card card, ArrayList<Card> pile) {
         pile.add(card);
     }
 
-    public static <T extends User> boolean isValidCard(T user, Card card, ArrayList<Card> pile) {
+    public static boolean isValidCard(Card card, ArrayList<Card> pile) {
         if (card == null) {
             return true; // pass turn
         }

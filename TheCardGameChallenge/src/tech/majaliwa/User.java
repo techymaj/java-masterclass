@@ -1,11 +1,13 @@
+package tech.majaliwa;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class User implements UserInterface {
 
     private final String name;
-    private List<Integer> scoreHistory;
-    private ArrayList<Card> hand;
+    private final List<Integer> scoreHistory;
+    private final ArrayList<Card> hand;
     private int score;
 
     public User(String name) {
@@ -20,13 +22,6 @@ public class User implements UserInterface {
 
     public ArrayList<Card> getHand() {
         return this.hand;
-    }
-
-    public ArrayList<Card> getInitialHand(ArrayList<Card> deck) {
-        var initialHand = deck.subList(0,7);
-        this.hand.addAll(initialHand);
-        initialHand.clear();
-        return (ArrayList<Card>) initialHand;
     }
 
     public int getScore() {
@@ -66,33 +61,4 @@ public class User implements UserInterface {
         return cardToPlay;
     }
 
-    public List<Card> pickTwoCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 2);
-        deck.subList(0, 2).clear();
-        return cardToPick;
-    }
-
-    public List<Card> pickThreeCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 3);
-        deck.subList(0, 3).clear();
-        return cardToPick;
-    }
-
-    public List<Card> pickFiveCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
-        }
-        var cardToPick = deck.subList(0, 5);
-        deck.subList(0, 5).clear();
-        return cardToPick;
-    }
 }

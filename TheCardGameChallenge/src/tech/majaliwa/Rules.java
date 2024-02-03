@@ -1,3 +1,5 @@
+package tech.majaliwa;
+
 public class Rules {
     public static boolean isCLASSIC;
     public static String WELCOME_MESSAGE = """

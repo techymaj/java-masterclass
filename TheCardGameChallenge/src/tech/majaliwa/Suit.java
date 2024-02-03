@@ -1,3 +1,5 @@
+package tech.majaliwa;
+
 public enum Suit {
     HEARTS("♥"),
     SPADES("♠"),

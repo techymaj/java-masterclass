@@ -1,3 +1,5 @@
+package tech.majaliwa;
+
 public enum Face {
     TWO("2"),
     THREE("3"),
@@ -12,12 +14,11 @@ public enum Face {
     QUEEN("Q"),
     KING("K"),
     ACE("A"),
-//    KIZIKIZA("Kizikiza"),
     JOKER("Joker");
 
     private final String face;
 
-    private Face(String face) {
+    Face(String face) {
         this.face = face;
     }
 

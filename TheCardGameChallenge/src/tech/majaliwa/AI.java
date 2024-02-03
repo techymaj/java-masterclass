@@ -1,5 +1,6 @@
+package tech.majaliwa;
+
 public class AI extends User {
-    public static final String AI_NAME = "AI";
 
     public AI(String name) {
         super(name);
@@ -11,7 +12,7 @@ public class AI extends User {
         while (iterator.hasNext()) {
             var card = iterator.next();
 
-            if (Main.isValidCard(this, card, Main.pile)) {
+            if (Main.isValidCard(card, Main.pile)) {
                 System.out.println(this.getName() + " played: " + card);
                 iterator.remove();
                 return card;
@@ -30,24 +31,11 @@ public class AI extends User {
         this.getHand().add(pickedCard);
         System.out.println(this.getName() + " picked a card from the deck");
 
-        if (Main.isValidCard(this, pickedCard, Main.pile)) {
+        if (Main.isValidCard(pickedCard, Main.pile)) {
             System.out.println(this.getName() + " picked and played " + pickedCard);
             this.getHand().remove(pickedCard);
             return pickedCard;
         }
-
-
-//        if (pickCount == 2) {
-//            this.pickTwoCards(Main.deck);
-//        }
-//
-//        if (pickCount == 3) {
-//            this.pickThreeCards(Main.deck);
-//        }
-//
-//        if (pickCount == 5) {
-//            this.pickFiveCards(Main.deck);
-//        }
 
         return null; // pass turn
     }
