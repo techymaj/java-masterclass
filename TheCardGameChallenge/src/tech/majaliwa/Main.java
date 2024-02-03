@@ -89,9 +89,11 @@ public class Main {
         System.out.println("Do you want to play again? (y/n)");
         var input = scanner.nextLine();
         if (input.equalsIgnoreCase("y")) {
-            EXIT_GAME = false;
-            deck.clear();
+            System.out.println("Restarting game...");
             pile.clear();
+            deck.clear();
+            EXIT_GAME = false;
+            main(new String[]{});
         } else if (input.equalsIgnoreCase("n")) {
             System.out.println("Thanks for playing!");
             System.exit(0);
@@ -166,7 +168,7 @@ public class Main {
                 return true;
             }
         } catch (NumberFormatException nfe) {
-            System.out.println("Invalid input. Try again");
+            System.out.println("Invalid input or wrong suit. Try again");
             return true;
         }
 
@@ -213,6 +215,7 @@ public class Main {
         var cardPlayed = player.playCard(chosenCard);
         var isValidCard = isValidCard(cardPlayed, pile);
         if (!isValidCard) {
+            System.out.println("Invalid card. Try again");
             getPile(pile);
             return true;
         }
@@ -314,9 +317,9 @@ public class Main {
             } else {
                 System.out.println(user.getName() + " won!");
             }
-            System.out.println(user.getName() + "'s score: " + user.getScore());
-            user.getScoreHistory().add(user.getScore());
-            System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
+//            System.out.println(user.getName() + "'s score: " + user.getScore());
+//            user.getScoreHistory().add(user.getScore());
+//            System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
 
             EXIT_GAME = true;
             restartGame(deck, pile, new Scanner(System.in));
