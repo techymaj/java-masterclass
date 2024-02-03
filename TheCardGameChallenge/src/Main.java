@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Main {
     public static boolean EXIT_GAME = false;
-    public static boolean playAgain = true;
     public static ArrayList<Card> pile = new ArrayList<>();
     public static ArrayList<Card> deck;
     public static int passCount = 0;
+    public static int pickCount = 0;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -52,9 +52,8 @@ public class Main {
         AI.setInitialHand(deck);
         System.out.println("Size of deck: " + deck.size());
 
-        if (playAgain) {
+
             gameInSession(player, AI, deck, pile);
-        }
     }
 
     private static void gameInSession(Player player, AI ai, ArrayList<Card> deck, ArrayList<Card> pile) {
@@ -75,24 +74,28 @@ public class Main {
         System.out.println("Do you want to play again? (y/n)");
         var input = scanner.nextLine();
         if (input.equalsIgnoreCase("y")) {
-            playAgain = true;
             EXIT_GAME = false;
             deck.clear();
             pile.clear();
-//            main(null);
+        } else if (input.equalsIgnoreCase("n")) {
+            System.out.println("Thanks for playing!");
+            System.exit(0);
         } else {
-            playAgain = false;
-            System.out.println("Thank you for playing");
+            System.out.println("Invalid input");
+            restartGame(deck, pile, scanner);
         }
     }
 
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
-        var pickCount = 0;
+
         while (true) {
             playerChoosesAction(player, pickCount);
             var input = scanner.nextLine();
+            if (input.equalsIgnoreCase("p") && pickCount == 1) {
+                System.out.println("You can't pick a card without playing one. Try again");
+                continue;
+            }
             if (input.equalsIgnoreCase("p")) {
-
                 var cardToPick = UserInterface.pickCard(deck);
                 if (cardToPick == null) {
                     reshuffleDeckAndContinuePlaying();
@@ -108,6 +111,7 @@ public class Main {
             } else if (input.equalsIgnoreCase("pass")) {
                 if (passCount == 0) {
                     passCount++; // You can't pass until you pick a card or play one
+                    pickCount = 0; // reset pick count
                     System.out.println("You passed your turn");
                     break;
                 } else {
@@ -157,10 +161,13 @@ public class Main {
                 getPile(pile);
                 continue;
             }
+            System.out.println("*".repeat(25));
             System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
+            System.out.println("*".repeat(25));
             if (cardPlayed != null) {
                 addToPile(ai, cardPlayed, pile);
                 passCount++; // Opponent can't pass until a card is picked or played
+                pickCount = 0; // reset pick count for opponent
             }
             checkIfPlayerWon(ai);
             break;
@@ -271,7 +278,9 @@ public class Main {
                 System.out.println(user.getName() + " won!");
             }
             System.out.println(user.getName() + "'s score: " + user.getScore());
+            user.getScoreHistory().add(user.getScore());
             System.out.println(user.getName() + "'s score history: " + user.getScoreHistory());
+
             EXIT_GAME = true;
             restartGame(deck, pile, new Scanner(System.in));
         }
