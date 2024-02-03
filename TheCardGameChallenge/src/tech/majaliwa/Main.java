@@ -189,6 +189,7 @@ public class Main {
     }
 
     private static void aI_s_Turn(AI ai, ArrayList<Card> pile) {
+        enforcePassRule();
         // AI's turn (if player successfully played a card)
         while (true) {
             System.out.println("AI's turn");
@@ -203,7 +204,6 @@ public class Main {
             System.out.println("*".repeat(25));
             if (cardPlayed != null) {
                 addToPile(cardPlayed, pile);
-                enforcePassRule();
             }
             checkIfPlayerWon(ai);
             break;
