@@ -1,6 +1,6 @@
 package tech.majaliwa;
 
-import static tech.majaliwa.Main.isValidCard;
+import static tech.majaliwa.Game.isValidCard;
 
 public class Player extends User {
 
@@ -16,7 +16,7 @@ public class Player extends User {
         while (iterator.hasNext()) {
             var card = iterator.next();
             if (card.equals(cardToPlay)) {
-                if (isValidCard(cardToPlay, Main.pile)) {
+                if (isValidCard(cardToPlay, Game.pile)) {
                     System.out.println(this.getName() + " played: " + card);
                     iterator.remove();
                 }

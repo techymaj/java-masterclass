@@ -12,7 +12,7 @@ public class AI extends User {
         while (iterator.hasNext()) {
             var card = iterator.next();
 
-            if (Main.isValidCard(card, Main.pile)) {
+            if (Game.isValidCard(card, Game.pile)) {
                 System.out.println(this.getName() + " played: " + card);
                 iterator.remove();
                 return card;
@@ -21,17 +21,17 @@ public class AI extends User {
 
         // If no valid card found in hand, pick a card from the deck
         System.out.println("AI is thinking...");
-        var pickedCard = UserInterface.pickCard(Main.deck);
+        var pickedCard = UserInterface.pickCard(Game.deck);
 
         if (pickedCard == null) {
-            Main.reshuffleDeckAndContinuePlaying();
+            Game.reshuffleDeckAndContinuePlaying();
             return this.playCard();
         }
 
         this.getHand().add(pickedCard);
         System.out.println(this.getName() + " picked a card from the deck");
 
-        if (Main.isValidCard(pickedCard, Main.pile)) {
+        if (Game.isValidCard(pickedCard, Game.pile)) {
             System.out.println(this.getName() + " picked and played " + pickedCard);
             this.getHand().remove(pickedCard);
             return pickedCard;

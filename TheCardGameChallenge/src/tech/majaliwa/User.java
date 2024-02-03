@@ -28,10 +28,6 @@ public class User implements UserInterface {
         return this.score;
     }
 
-    public List<Integer> getScoreHistory() {
-        return this.scoreHistory;
-    }
-
     public void setScoreHistory() {
         this.scoreHistory.add(this.score);
     }
