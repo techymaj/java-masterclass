@@ -43,25 +43,32 @@ public class Main {
         AI.setInitialHand(deck);
         System.out.println("Size of deck: " + deck.size());
 
-
-            gameInSession(player, AI, deck, pile);
+        gameInSession(player, AI, deck, pile);
     }
 
     private static Scanner setGameMode() {
-        System.out.println("Do you want to play in classic mode? (y/n) ");
+        System.out.println("Do you want to play in classic mode? (y/n). Enter 'e' to exit the game");
 
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
 
-        if (answer.equals("y")) {
-            Rules.isCLASSIC = true;
-            System.out.println(Rules.CLASSIC);
-        } else if (answer.equals("n")) {
-            Rules.isCLASSIC = false;
-            System.out.println(Rules.NOT_CLASSIC);
-        } else {
-            System.out.println("Invalid input");
-            return setGameMode();
+        switch (answer.toLowerCase()) {
+            case "y", "yes" -> {
+                Rules.isCLASSIC = true;
+                System.out.println(Rules.CLASSIC);
+            }
+            case "e", "exit" -> {
+                System.out.println("Have a good day!");
+                System.exit(0);
+            }
+            case "n", "no" -> {
+                Rules.isCLASSIC = false;
+                System.out.println(Rules.NOT_CLASSIC);
+            }
+            default -> {
+                System.out.println("Invalid input. Enter 'e' to exit or 'y' or 'n' to continue");
+                return setGameMode();
+            }
         }
         return scanner;
     }
