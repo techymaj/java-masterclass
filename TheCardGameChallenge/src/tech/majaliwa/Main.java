@@ -103,10 +103,10 @@ public class Main {
 
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
 
-        while (true) {
-            playerChoosesAction(player, pickCount);
+        do {
             var input = scanner.nextLine();
             var inputIsPickCard = input.equalsIgnoreCase("p");
+            playerChoosesAction(player, pickCount);
 
             if (inputIsPickCard && pickCount == 1) {
                 System.out.println("You can't pick a card without playing one. Try again");
@@ -115,7 +115,6 @@ public class Main {
             if (inputIsPickCard) {
                 pickCard(player, deck);
                 continue;
-
             } else {
                 var inputIsPass = input.equalsIgnoreCase("pass");
                 if (inputIsPass) {
@@ -132,7 +131,7 @@ public class Main {
                 }
             }
             break;
-        }
+        } while (true);
     }
 
     private static void enforcePassRule() {
@@ -175,8 +174,8 @@ public class Main {
     }
 
     static void reshuffleDeckAndContinuePlaying() {
-        System.out.println("There is nothing left in the deck");
         var getLastCard = Main.pile.get(Main.pile.size() - 1);
+        System.out.println("There is nothing left in the deck");
         System.out.println("Shuffling the pile...");
         Collections.shuffle(Main.pile);
         Main.pile.remove(getLastCard);
@@ -232,9 +231,12 @@ public class Main {
                 card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
         if (pickCount == 0) {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or p to pick a card from the deck or 'pass' to pass your turn");
+            System.out.println("\nEnter the position of the card you want to play " +
+                    "(1 - " + player.getHand().size() + ") " +
+                    "or p to pick a card from the deck or 'pass' to pass your turn");
         } else {
-            System.out.println("\nEnter the position of the card you want to play (1 - " + player.getHand().size() + ") or 'pass' to your pass turn");
+            System.out.println("\nEnter the position of the card you want to play " +
+                    "(1 - " + player.getHand().size() + ") or 'pass' to your pass turn");
         }
     }
 
@@ -296,7 +298,7 @@ public class Main {
                 return true; // play joker M on top of spades or clubs
             }
 
-            return currentFace.equals(previousFace) || currentSuit.equals(previousSuit); // play card if face or suit matches
+            return currentFace.equals(previousFace) || currentSuit.equals(previousSuit); // play if face or suit matches
         }
     }
 
