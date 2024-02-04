@@ -25,21 +25,20 @@ public class AI extends User {
         }
 
         randomizeThought();
-        // If no valid card found in hand, pick a card from the deck
-        var pickedCard = UserInterface.pickCard(Game.deck);
+        var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard(Game.deck);
 
-        if (pickedCard == null) {
+        if (pickFromDeckIfNoValidCardInHand == null) {
             Game.reshuffleDeckAndContinuePlaying();
             return this.playCard();
         }
 
-        this.getHand().add(pickedCard);
+        this.getHand().add(pickFromDeckIfNoValidCardInHand);
         System.out.println(this.getName() + " picked a card from the deck");
 
-        if (Game.isValidCard(pickedCard, Game.pile)) {
-            System.out.println(this.getName() + " picked and played " + pickedCard);
-            this.getHand().remove(pickedCard);
-            return pickedCard;
+        if (Game.isValidCard(pickFromDeckIfNoValidCardInHand, Game.pile)) {
+            System.out.println(this.getName() + " picked and played " + pickFromDeckIfNoValidCardInHand);
+            this.getHand().remove(pickFromDeckIfNoValidCardInHand);
+            return pickFromDeckIfNoValidCardInHand;
         }
 
         return null; // pass turn
@@ -55,21 +54,21 @@ public class AI extends User {
 
     public static void randomizeThought() {
         Random random = new Random();
-        int thought = random.nextInt(10);
+        int thought = random.nextInt(40);
         switch (thought) {
-            case 1 -> {
+            case 10 -> {
                 System.out.println("Hold on, I'm thinking...");
                 aiIsThinking();
             }
-            case 2 -> {
+            case 20 -> {
                 System.out.println("I am so winning this...");
                 aiIsThinking();
             }
-            case 3 -> {
+            case 30 -> {
                 System.out.println("Strategizing...");
                 aiIsThinking();
             }
-            case 4 -> {
+            case 39 -> {
                 System.out.println("Wait, i am planning...");
                 aiIsThinking();
             }
