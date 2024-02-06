@@ -12,6 +12,7 @@ public class Game {
     public static ArrayList<Card> deck;
     public static boolean playerCanPassAfterPickingOrPlayingCard = true;
     public static boolean playerCanPickCardFromDeck = true;
+    public static boolean PICK_FROM_DECK_OR_COUNTER = false;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -48,6 +49,7 @@ public class Game {
     public void startGame() {
         main(new String[]{});
     }
+
     private static Scanner setGameMode() {
         System.out.println("Do you want to play in classic mode? (y/n). Enter 'e' to exit the game");
 
@@ -113,6 +115,43 @@ public class Game {
             playerChoosesAction(player, playerCanPickCardFromDeck);
             var input = scanner.nextLine();
             var inputIsPickCard = input.equalsIgnoreCase("p");
+            var inputIsAcceptDamage = input.equalsIgnoreCase("accept");
+
+            if (inputIsAcceptDamage) {
+                var face = pile.get(pile.size() - 1);
+                var currentFace = face.face();
+
+                switch (currentFace) {
+                    case TWO -> {
+                        var damage = player.pickTwoCards(deck);
+                        var iterator = player.getHand().listIterator();
+                        for (var card : damage) {
+                            iterator.add(card);
+                        }
+                        System.out.println("Picked 2");
+
+                    }
+                    case THREE -> {
+                        var damage = player.pickThreeCards(deck);
+                        var iterator = player.getHand().listIterator();
+                        for (var card : damage) {
+                            iterator.add(card);
+                        }
+                        System.out.println("Picked 3");
+                    }
+                    case JOKER -> {
+                        var damage = player.pickFiveCards(deck);
+                        var iterator = player.getHand().listIterator();
+                        for (var card : damage) {
+                            iterator.add(card);
+                        }
+                        System.out.println("Picked 5");
+                    }
+                }
+                damageDone();
+
+                break;
+            }
 
             if (inputIsPickCard && !playerCanPickCardFromDeck) {
                 System.out.println("Pass your turn or play a card. Try again");
@@ -138,6 +177,12 @@ public class Game {
             }
             break;
         } while (true);
+    }
+
+    private static void damageDone() {
+        PICK_FROM_DECK_OR_COUNTER = false;
+        playerCanPickCardFromDeck = true;
+        playerCanPassAfterPickingOrPlayingCard = true;
     }
 
     private static void enforcePassRule() {
@@ -209,10 +254,25 @@ public class Game {
             System.out.println("*".repeat(25));
             if (cardPlayed != null) {
                 addToPile(cardPlayed, pile);
+                var opponentShouldPickFromDeck = ai.checkIfOpponentShouldPickFromDeck(cardPlayed);
+                if (opponentShouldPickFromDeck) {
+                    doDamage();
+                    break;
+                }
             }
             checkIfPlayerWon(ai);
+            var canFollowCard = ai.checkIfCanFollowCard();
+            if (canFollowCard) {
+                continue;
+            }
             break;
         }
+    }
+
+    private static void doDamage() {
+        PICK_FROM_DECK_OR_COUNTER = true;
+        playerCanPickCardFromDeck = false;
+        playerCanPassAfterPickingOrPlayingCard = false;
     }
 
     private static boolean cardIsNotPlayed(Player player, ArrayList<Card> pile, String input) {
@@ -243,7 +303,11 @@ public class Game {
         getHand.forEach(
                 card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
         );
-        if (!playerCanPickCardFromDeck) {
+
+        if (Game.PICK_FROM_DECK_OR_COUNTER && !playerCanPickCardFromDeck) {
+            System.out.println("\nEnter 'accept' to accept damage and pick from deck " +
+                    "or play a card to counter ");
+        } else if (!Game.PICK_FROM_DECK_OR_COUNTER && !playerCanPickCardFromDeck) {
             System.out.println("\nEnter the position of the card you want to play " +
                     "(1 - " + player.getHand().size() + ") " +
                     "or p to pick a card from the deck or 'pass' to pass your turn");
