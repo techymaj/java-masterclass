@@ -19,12 +19,13 @@ public class AI extends User {
 
             if (Game.isValidCard(card, Game.pile)) {
                 System.out.println(this.getName() + " played: " + card);
+                Game.PICK_ONCE_FROM_DECK = true;
                 iterator.remove();
                 return card;
             }
         }
 
-        randomizeThought();
+//        randomizeThought();
         var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard(Game.deck);
 
         if (pickFromDeckIfNoValidCardInHand == null) {
@@ -32,8 +33,13 @@ public class AI extends User {
             return this.playCard();
         }
 
-        this.getHand().add(pickFromDeckIfNoValidCardInHand);
-        System.out.println(this.getName() + " picked a card from the deck");
+        if (Game.PICK_ONCE_FROM_DECK && Game.PICK_COUNT < 1) {
+            this.getHand().add(pickFromDeckIfNoValidCardInHand);
+            System.out.println(this.getName() + " picked a card from the deck");
+            Game.PICK_ONCE_FROM_DECK = false;
+            Game.PICK_COUNT++;
+            return this.playCard();
+        }
 
         if (Game.isValidCard(pickFromDeckIfNoValidCardInHand, Game.pile)) {
             System.out.println(this.getName() + " picked and played " + pickFromDeckIfNoValidCardInHand);

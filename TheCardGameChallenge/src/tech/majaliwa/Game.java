@@ -13,6 +13,8 @@ public class Game {
     public static boolean playerCanPassAfterPickingOrPlayingCard = true;
     public static boolean playerCanPickCardFromDeck = true;
     public static boolean PICK_FROM_DECK_OR_COUNTER = false;
+    public static boolean PICK_ONCE_FROM_DECK = true;
+    public static int PICK_COUNT = 0;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -126,7 +128,7 @@ public class Game {
                     case THREE -> player.pickThreeCards(deck);
                     case JOKER -> player.pickFiveCards(deck);
                 }
-                damageDone();
+                resetDamageRules();
 
                 break;
             }
@@ -161,7 +163,7 @@ public class Game {
         } while (true);
     }
 
-    private static void damageDone() {
+    private static void resetDamageRules() {
         PICK_FROM_DECK_OR_COUNTER = false;
         playerCanPickCardFromDeck = true;
         playerCanPassAfterPickingOrPlayingCard = true;
@@ -238,7 +240,7 @@ public class Game {
                 addToPile(cardPlayed, pile);
                 var opponentShouldPickFromDeck = ai.checkIfOpponentShouldPickFromDeck(cardPlayed);
                 if (opponentShouldPickFromDeck) {
-                    doDamage();
+                    enforceDamageRules();
                     break;
                 }
             }
@@ -251,7 +253,7 @@ public class Game {
         }
     }
 
-    private static void doDamage() {
+    private static void enforceDamageRules() {
         PICK_FROM_DECK_OR_COUNTER = true;
         playerCanPickCardFromDeck = false;
         playerCanPassAfterPickingOrPlayingCard = false;
@@ -295,7 +297,7 @@ public class Game {
                     "or p to pick a card from the deck or 'pass' to pass your turn");
         } else {
             System.out.println("\nEnter the position of the card you want to play " +
-                    "(1 - " + player.getHand().size() + ") or 'pass' to your pass turn");
+                    "(1 - " + player.getHand().size() + ") or 'pass' to pass your turn");
         }
     }
 

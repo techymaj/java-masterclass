@@ -10,6 +10,7 @@ public class Player extends User {
 
     @Override
     public Card playCard(int position) {
+        Game.PICK_COUNT = 0; // reset pick rule for a.i
         var iterator = this.getHand().listIterator();
         var cardToPlay = this.getHand().get(position - 1);
 
