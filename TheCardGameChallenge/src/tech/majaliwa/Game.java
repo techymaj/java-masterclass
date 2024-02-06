@@ -15,6 +15,7 @@ public class Game {
     public static boolean PICK_FROM_DECK_OR_COUNTER = false;
     public static boolean PICK_ONCE_FROM_DECK = true;
     public static int PICK_COUNT = 0;
+    public static boolean AI_TAKES_DAMAGE = false;
 
     public static void main(String[] args) {
         System.out.println(Rules.WELCOME_MESSAGE);
@@ -112,7 +113,7 @@ public class Game {
     }
 
     private static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
-
+        AI_TAKES_DAMAGE = false;
         do {
             playerChoosesAction(player, playerCanPickCardFromDeck);
             var input = scanner.nextLine();
@@ -227,6 +228,17 @@ public class Game {
         enforcePassRule();
         while (true) {
             System.out.println("AI's turn");
+            if (AI_TAKES_DAMAGE) {
+                var face = pile.get(pile.size() - 1);
+                var currentFace = face.face();
+
+                switch (currentFace) {
+                    case TWO -> ai.pickTwoCards(deck);
+                    case THREE -> ai.pickThreeCards(deck);
+                    case JOKER -> ai.pickFiveCards(deck);
+                }
+                break;
+            }
             var cardPlayed = ai.playCard();
             var isValidCard = isValidCard(cardPlayed, pile);
             if (!isValidCard) {
@@ -276,6 +288,12 @@ public class Game {
         if (canFollowCard) {
             System.out.println("You can follow this card with another valid card");
             return true;
+        }
+        var opponentShouldPickFromDeck = player.checkIfOpponentShouldPickFromDeck(cardPlayed);
+        if (opponentShouldPickFromDeck) {
+            // a.i picks from deck
+            AI_TAKES_DAMAGE = true;
+            return false;
         }
         return false;
     }

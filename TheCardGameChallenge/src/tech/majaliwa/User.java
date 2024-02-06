@@ -93,7 +93,11 @@ public class User implements UserInterface {
 
         arrayList.addAll(picked);
         this.hand.addAll(arrayList);
-        System.out.println("Picked 2");
+        if (this instanceof Player) {
+            System.out.println("Picked 2");
+        } else {
+            System.out.println(this.name + "picked 2");
+        }
         System.out.println();
         picked.clear();
 
@@ -110,7 +114,11 @@ public class User implements UserInterface {
 
         arrayList.addAll(picked);
         this.hand.addAll(arrayList);
-        System.out.println("Picked 3");
+        if (this instanceof Player) {
+            System.out.println("Picked 3");
+        } else {
+            System.out.println(this.name + "picked 3");
+        }
         System.out.println();
         picked.clear();
 
@@ -127,7 +135,11 @@ public class User implements UserInterface {
 
         arrayList.addAll(picked);
         this.hand.addAll(arrayList);
-        System.out.println("Picked 5");
+        if (this instanceof Player) {
+            System.out.println("Picked 5");
+        } else {
+            System.out.println(this.name + "picked 5");
+        }
         System.out.println();
         picked.clear();
 
