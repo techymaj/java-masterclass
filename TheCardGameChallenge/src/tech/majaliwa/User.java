@@ -37,9 +37,9 @@ public class User implements UserInterface {
     }
 
     public void setInitialHand(ArrayList<Card> deck) {
-        var initialHand = deck.subList(0,7);
+        var initialHand = deck.subList(0, 7);
         this.hand.addAll(initialHand);
-        deck.subList(0,7).clear();
+        deck.subList(0, 7).clear();
     }
 
     public Card playCard(int position) {
@@ -57,4 +57,14 @@ public class User implements UserInterface {
         return cardToPlay;
     }
 
+    public boolean checkIfCanFollowCard() {
+        var cardOnTopOfPile = Game.pile.get(Game.pile.size() - 1);
+        var currentFace = cardOnTopOfPile.face();
+        switch (currentFace) {
+            case JACK, EIGHT -> {
+                return true;
+            }
+        }
+        return false;
+    }
 }

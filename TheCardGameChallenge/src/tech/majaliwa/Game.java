@@ -228,6 +228,11 @@ public class Game {
         addToPile(cardPlayed, pile);
         playerCanPassAfterPickingOrPlayingCard = false;
         checkIfPlayerWon(player);
+        var canFollowCard = player.checkIfCanFollowCard();
+        if (canFollowCard) {
+            System.out.println("You can follow this card with another valid card");
+            return true;
+        }
         return false;
     }
 
