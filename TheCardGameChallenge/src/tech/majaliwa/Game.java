@@ -122,35 +122,17 @@ public class Game {
                 var currentFace = face.face();
 
                 switch (currentFace) {
-                    case TWO -> {
-                        var damage = player.pickTwoCards(deck);
-                        var iterator = player.getHand().listIterator();
-                        for (var card : damage) {
-                            iterator.add(card);
-                        }
-                        System.out.println("Picked 2");
-
-                    }
-                    case THREE -> {
-                        var damage = player.pickThreeCards(deck);
-                        var iterator = player.getHand().listIterator();
-                        for (var card : damage) {
-                            iterator.add(card);
-                        }
-                        System.out.println("Picked 3");
-                    }
-                    case JOKER -> {
-                        var damage = player.pickFiveCards(deck);
-                        var iterator = player.getHand().listIterator();
-                        for (var card : damage) {
-                            iterator.add(card);
-                        }
-                        System.out.println("Picked 5");
-                    }
+                    case TWO -> player.pickTwoCards(deck);
+                    case THREE -> player.pickThreeCards(deck);
+                    case JOKER -> player.pickFiveCards(deck);
                 }
                 damageDone();
 
                 break;
+            }
+
+            if (inputIsPickCard && Game.PICK_FROM_DECK_OR_COUNTER) {
+                continue;
             }
 
             if (inputIsPickCard && !playerCanPickCardFromDeck) {

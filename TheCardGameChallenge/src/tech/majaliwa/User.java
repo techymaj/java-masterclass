@@ -7,7 +7,7 @@ public class User implements UserInterface {
 
     private final String name;
     private final List<Integer> scoreHistory;
-    private final ArrayList<Card> hand;
+    private ArrayList<Card> hand;
     private int score;
 
     public User(String name) {
@@ -34,6 +34,10 @@ public class User implements UserInterface {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setHand(ArrayList<Card> hand) {
+        this.hand = hand;
     }
 
     public void setInitialHand(ArrayList<Card> deck) {
@@ -79,33 +83,54 @@ public class User implements UserInterface {
         return false;
     }
 
-    public List<Card> pickTwoCards(ArrayList<Card> deck) {
+    public ArrayList<Card> pickTwoCards(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
             System.out.println("There is nothing left in the deck");
             return null;
         }
-        var cardToPick = deck.subList(0, 2);
-        deck.subList(0, 2).clear();
-        return cardToPick;
+        var picked = deck.subList(0, 2);
+        ArrayList<Card> arrayList = new ArrayList<>(picked);
+
+        arrayList.addAll(picked);
+        this.hand.addAll(arrayList);
+        System.out.println("Picked 2");
+        System.out.println();
+        picked.clear();
+
+        return arrayList;
     }
 
-    public List<Card> pickThreeCards(ArrayList<Card> deck) {
+    public ArrayList<Card> pickThreeCards(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
             System.out.println("There is nothing left in the deck");
             return null;
         }
-        var cardToPick = deck.subList(0, 3);
-        deck.subList(0, 3).clear();
-        return cardToPick;
+        var picked = deck.subList(0, 3);
+        ArrayList<Card> arrayList = new ArrayList<>(picked);
+
+        arrayList.addAll(picked);
+        this.hand.addAll(arrayList);
+        System.out.println("Picked 3");
+        System.out.println();
+        picked.clear();
+
+        return arrayList;
     }
 
-    public List<Card> pickFiveCards(ArrayList<Card> deck) {
+    public ArrayList<Card> pickFiveCards(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
             System.out.println("There is nothing left in the deck");
             return null;
         }
-        var cardToPick = deck.subList(0, 5);
-        deck.subList(0, 5).clear();
-        return cardToPick;
+        var picked = deck.subList(0, 5);
+        ArrayList<Card> arrayList = new ArrayList<>(picked);
+
+        arrayList.addAll(picked);
+        this.hand.addAll(arrayList);
+        System.out.println("Picked 5");
+        System.out.println();
+        picked.clear();
+
+        return arrayList;
     }
 }
