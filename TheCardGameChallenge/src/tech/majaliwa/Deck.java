@@ -36,6 +36,7 @@ public class Deck {
                 deckOfCards.add(new Card(Face.getFace(i), Suit.HEARTS, 15));
                 deckOfCards.add(new Card(Face.getFace(i), Suit.CLUBS, 15));
                 deckOfCards.add(new Card(Face.getFace(i), Suit.DIAMONDS, 15));
+                break;
             }
             deckOfCards.add(new Card(Face.getFace(i), Suit.SPADES, cardValues[i]));
             deckOfCards.add(new Card(Face.getFace(i), Suit.HEARTS, cardValues[i]));
