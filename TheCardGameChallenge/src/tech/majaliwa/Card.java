@@ -9,6 +9,6 @@ public record Card(
 
     @Override
     public String toString() {
-        return face.getFace() + this.suit.getUnicode() + " " + this.cardValue;
+        return face.getFace() + this.suit.getUnicode();
     }
 }

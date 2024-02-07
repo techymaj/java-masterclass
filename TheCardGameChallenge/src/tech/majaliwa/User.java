@@ -2,6 +2,9 @@ package tech.majaliwa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import static tech.majaliwa.Game.*;
 
 public class User implements UserInterface {
 
@@ -9,6 +12,7 @@ public class User implements UserInterface {
     private final List<Integer> scoreHistory;
     private ArrayList<Card> hand;
     private int score;
+    private boolean turn;
 
     public User(String name) {
         this.name = name;
@@ -36,14 +40,107 @@ public class User implements UserInterface {
         this.score = score;
     }
 
-    public void setHand(ArrayList<Card> hand) {
-        this.hand = hand;
-    }
-
     public void setInitialHand(ArrayList<Card> deck) {
         var initialHand = deck.subList(0, 7);
         this.hand.addAll(initialHand);
         deck.subList(0, 7).clear();
+    }
+
+    static void pickCard(User user, ArrayList<Card> deck) {
+        var cardToPick = UserInterface.pickCard(deck);
+
+        if (cardToPick == null) {
+            Game.reshuffleDeckAndContinuePlaying();
+            return;
+        }
+
+        user.getHand().add(cardToPick);
+
+        if (user instanceof Player) {
+            System.out.println("You picked: " + cardToPick);
+        } else {
+            System.out.println(user.name + " picked: " + cardToPick);
+        }
+        enforcePickRule();
+    }
+
+    public static boolean isValidCard(Card card, ArrayList<Card> pile) {
+        if (card == null) {
+            return true; // pass turn
+        }
+        if (pile.isEmpty()) {
+            return true; // Any card can be played if the pile is empty
+        } else {
+            var previousFace = pile.get(pile.size() - 1).face();
+            var currentFace = card.face();
+
+            var previousSuit = pile.get(pile.size() - 1).suit();
+            var currentSuit = card.suit();
+
+            var previousCardIsJoker_F = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_F);
+            var previousCardIsJoker_M = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_M);
+
+            var currentCardIsJoker_F = card.suit().equals(Suit.JOKER_F);
+            var currentCardIsJoker_M = card.suit().equals(Suit.JOKER_M);
+
+            var canPlayOnTopOfJoker_F = currentSuit.equals(Suit.HEARTS) || currentSuit.equals(Suit.DIAMONDS);
+            var canPlayOnTopOfJoker_M = currentSuit.equals(Suit.SPADES) || currentSuit.equals(Suit.CLUBS);
+
+            var canPlayJoker_F = previousSuit.equals(Suit.HEARTS) || previousSuit.equals(Suit.DIAMONDS);
+            var canPlayJoker_M = previousSuit.equals(Suit.SPADES) || previousSuit.equals(Suit.CLUBS);
+
+            if (previousFace.equals(Face.TWO) && (currentFace.equals(Face.TWO)
+                    || currentFace.equals(Face.THREE))) {
+                return true;
+            }
+
+            if (previousFace.equals(Face.THREE) && currentFace.equals(Face.THREE)) {
+                return true;
+            }
+
+            if (previousFace.equals(Face.JOKER) && currentFace.equals(Face.JOKER)) {
+                return true;
+            }
+
+            if (previousCardIsJoker_F && canPlayOnTopOfJoker_F) {
+                return true; // play hearts or diamonds on top of joker F
+            }
+
+            if (previousCardIsJoker_M && canPlayOnTopOfJoker_M) {
+                return true; // play spades or clubs on top of joker M
+            }
+
+            if (currentCardIsJoker_F && canPlayJoker_F) {
+                return true; // play joker F on top of hearts or diamonds
+            }
+
+            if (currentCardIsJoker_M && canPlayJoker_M) {
+                return true; // play joker M on top of spades or clubs
+            }
+
+            return currentFace.equals(previousFace) || currentSuit.equals(previousSuit); // play if face or suit matches
+        }
+    }
+
+    static void userChoosesAction(User user, boolean userCanPickCardFromDeck) {
+        System.out.println("It's your turn");
+        var getHand = user.getHand();
+        System.out.print("Your hand: ");
+        getHand.forEach(
+                card -> System.out.print(card + "(" + (getHand.indexOf(card) + 1) + ")" + " ")
+        );
+
+        if (Game.PICK_FROM_DECK_OR_COUNTER && !userCanPickCardFromDeck) {
+            System.out.println("\nEnter 'accept' to accept damage and pick from deck " +
+                    "or play a card to counter ");
+        } else if (!Game.PICK_FROM_DECK_OR_COUNTER && !userCanPickCardFromDeck) {
+            System.out.println("\nEnter the position of the card you want to play " +
+                    "(1 - " + user.getHand().size() + ") " +
+                    "or p to pick a card from the deck or 'pass' to pass your turn");
+        } else {
+            System.out.println("\nEnter the position of the card you want to play " +
+                    "(1 - " + user.getHand().size() + ") or 'pass' to pass your turn");
+        }
     }
 
     public Card playCard(int position) {
@@ -61,8 +158,35 @@ public class User implements UserInterface {
         return cardToPlay;
     }
 
+    static boolean cardIsNotPlayed(User user, ArrayList<Card> pile, String input) {
+        var chosenCard = Integer.parseInt(input);
+        var cardPlayed = user.playCard(chosenCard);
+        var isValidCard = isValidCard(cardPlayed, pile);
+        if (!isValidCard) {
+            System.out.println("Invalid card. Try again");
+            getPile(pile);
+            return true;
+        }
+        System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+        addToPile(cardPlayed, pile);
+        playerCanPassAfterPickingOrPlayingCard = false;
+        checkIfPlayerWon(user);
+        var canFollowCard = user.checkIfCanFollowCard();
+        if (canFollowCard) {
+            System.out.println("You can follow this card with another valid card");
+            return true;
+        }
+        var opponentShouldPickFromDeck = user.checkIfOpponentShouldPickFromDeck(cardPlayed);
+        if (opponentShouldPickFromDeck) {
+            // a.i picks from deck
+            AI_TAKES_DAMAGE = true;
+            return false;
+        }
+        return false;
+    }
+
     public boolean checkIfCanFollowCard() {
-        var cardOnTopOfPile = Game.pile.get(Game.pile.size() - 1);
+        var cardOnTopOfPile = pile.get(pile.size() - 1);
         var currentFace = cardOnTopOfPile.face();
         switch (currentFace) {
             case JACK, EIGHT -> {
@@ -83,66 +207,144 @@ public class User implements UserInterface {
         return false;
     }
 
-    public ArrayList<Card> pickTwoCards(ArrayList<Card> deck) {
-        if (deck.isEmpty()) {
-            System.out.println("There is nothing left in the deck");
-            return null;
+    static void takeDamage(User user, ArrayList<Card> deck, Face currentFace) {
+        switch (currentFace) {
+            case TWO -> {
+                var deckIsEmpty = user.pickTwoCards(deck);
+                if (deckIsEmpty == -1) {
+                    reshuffleDeckAndContinuePlaying();
+                    user.pickTwoCards(deck);
+                }
+            }
+            case THREE -> {
+                var deckIsEmpty = user.pickThreeCards(deck);
+                if (deckIsEmpty == -1) {
+                    reshuffleDeckAndContinuePlaying();
+                    user.pickThreeCards(deck);
+                }
+            }
+            case JOKER -> {
+                var deckIsEmpty = user.pickFiveCards(deck);
+                if (deckIsEmpty == -1) {
+                    reshuffleDeckAndContinuePlaying();
+                    user.pickFiveCards(deck);
+                }
+            }
         }
-        var picked = deck.subList(0, 2);
-        ArrayList<Card> arrayList = new ArrayList<>(picked);
-
-        arrayList.addAll(picked);
-        this.hand.addAll(arrayList);
-        if (this instanceof Player) {
-            System.out.println("Picked 2");
-        } else {
-            System.out.println(this.name + "picked 2");
-        }
-        System.out.println();
-        picked.clear();
-
-        return arrayList;
     }
 
-    public ArrayList<Card> pickThreeCards(ArrayList<Card> deck) {
+    public int pickTwoCards(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
             System.out.println("There is nothing left in the deck");
-            return null;
+            return -1;
         }
-        var picked = deck.subList(0, 3);
-        ArrayList<Card> arrayList = new ArrayList<>(picked);
 
-        arrayList.addAll(picked);
-        this.hand.addAll(arrayList);
-        if (this instanceof Player) {
-            System.out.println("Picked 3");
-        } else {
-            System.out.println(this.name + "picked 3");
+        try {
+            var picked = deck.subList(0, 2);
+            ArrayList<Card> arrayList = new ArrayList<>(picked);
+
+            this.hand.addAll(arrayList);
+
+            if (this instanceof Player) {
+                System.out.println("Picked 2");
+            } else {
+                System.out.println(this.name + " picked 2");
+            }
+            System.out.println();
+            picked.clear();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Not enough cards in the deck");
+            return -1;
         }
-        System.out.println();
-        picked.clear();
 
-        return arrayList;
+        return 1;
     }
 
-    public ArrayList<Card> pickFiveCards(ArrayList<Card> deck) {
+    public int pickThreeCards(ArrayList<Card> deck) {
         if (deck.isEmpty()) {
             System.out.println("There is nothing left in the deck");
-            return null;
+            return -1;
         }
-        var picked = deck.subList(0, 5);
-        ArrayList<Card> arrayList = new ArrayList<>(picked);
+        try {
+            var picked = deck.subList(0, 3);
+            ArrayList<Card> arrayList = new ArrayList<>(picked);
 
-        arrayList.addAll(picked);
-        this.hand.addAll(arrayList);
-        if (this instanceof Player) {
-            System.out.println("Picked 5");
+            this.hand.addAll(arrayList);
+
+            if (this instanceof Player) {
+                System.out.println("Picked 3");
+            } else {
+                System.out.println(this.name + " picked 3");
+            }
+            System.out.println();
+            picked.clear();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Not enough cards in the deck");
+            return -1;
+        }
+
+        return 1;
+    }
+
+    public int pickFiveCards(ArrayList<Card> deck) {
+        if (deck.isEmpty()) {
+            System.out.println("There is nothing left in the deck");
+            return -1;
+        }
+
+        try {
+            var picked = deck.subList(0, 5);
+            ArrayList<Card> arrayList = new ArrayList<>(picked);
+
+            this.hand.addAll(arrayList);
+
+            if (this instanceof Player) {
+                System.out.println("Picked 5");
+            } else {
+                System.out.println(this.name + " picked 5");
+            }
+            System.out.println();
+            picked.clear();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Not enough cards in the deck");
+            return -1;
+        }
+
+        return 1;
+    }
+
+    public static <T extends User> void checkIfPlayerWon(T user) {
+
+        if (user.getHand().isEmpty()) {
+            var scoreCount = user.getScore();
+            scoreCount++;
+            user.setScore(scoreCount);
+            user.setScoreHistory();
+            if (user instanceof Player) {
+                System.out.println("Congratulations " + user.getName() + " you won!");
+            } else {
+                System.out.println(user.getName() + " won!");
+            }
+
+            Game.EXIT_GAME = true;
+            restartGame(deck, pile, new Scanner(System.in));
+        }
+    }
+
+    public static void getPile(List<Card> pile) {
+        Deck.printDeck("Current pile", pile, 4);
+        System.out.println("Pile size --> " + pile.size());
+        System.out.println("Deck size --> " + deck.size());
+        System.out.println("-".repeat(25));
+        if (!pile.isEmpty()) {
+            System.out.println("Top of the pile: " + pile.get(pile.size() - 1));
         } else {
-            System.out.println(this.name + "picked 5");
+            System.out.println("Pile is empty");
         }
-        System.out.println();
-        picked.clear();
+        System.out.println("-".repeat(25));
+    }
 
-        return arrayList;
+    public static void addToPile(Card card, ArrayList<Card> pile) {
+        pile.add(card);
     }
 }

@@ -1,14 +1,53 @@
 package tech.majaliwa;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 
 import static java.util.logging.Logger.*;
+import static tech.majaliwa.Game.*;
 
 public class AI extends User {
 
     public AI(String name) {
         super(name);
+    }
+
+    static void aI_s_Turn(AI ai, ArrayList<Card> pile) {
+        enforcePassRule();
+        while (true) {
+            System.out.println("AI's turn");
+            if (AI_TAKES_DAMAGE) {
+                var face = pile.get(pile.size() - 1);
+                var currentFace = face.face();
+
+                takeDamage(ai, deck, currentFace);
+                break;
+            }
+            var cardPlayed = ai.playCard();
+            var isValidCard = isValidCard(cardPlayed, pile);
+            if (!isValidCard) {
+                getPile(pile);
+                continue;
+            }
+            System.out.println("*".repeat(25));
+            System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
+            System.out.println("*".repeat(25));
+            if (cardPlayed != null) {
+                addToPile(cardPlayed, pile);
+                var opponentShouldPickFromDeck = ai.checkIfOpponentShouldPickFromDeck(cardPlayed);
+                if (opponentShouldPickFromDeck) {
+                    enforceDamageRules();
+                    break;
+                }
+            }
+            checkIfPlayerWon(ai);
+            var canFollowCard = ai.checkIfCanFollowCard();
+            if (canFollowCard) {
+                continue;
+            }
+            break;
+        }
     }
 
     public Card playCard() {
@@ -17,31 +56,36 @@ public class AI extends User {
         while (iterator.hasNext()) {
             var card = iterator.next();
 
-            if (Game.isValidCard(card, Game.pile)) {
+            if (User.isValidCard(card, Game.pile)) {
                 System.out.println(this.getName() + " played: " + card);
-                Game.PICK_ONCE_FROM_DECK = true;
+                AI_PICK_ONCE_FROM_DECK = true;
+                playerCanPickCardFromDeck = true;
                 iterator.remove();
                 return card;
             }
         }
 
-//        randomizeThought();
-        var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard(Game.deck);
+        if (getHand().size() > 7) {
+            randomizeThought();
+        }
+
+        var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard(deck);
 
         if (pickFromDeckIfNoValidCardInHand == null) {
             Game.reshuffleDeckAndContinuePlaying();
             return this.playCard();
         }
 
-        if (Game.PICK_ONCE_FROM_DECK && Game.PICK_COUNT < 1) {
+        if (AI_PICK_ONCE_FROM_DECK && AI_PICK_COUNT < 1) {
             this.getHand().add(pickFromDeckIfNoValidCardInHand);
             System.out.println(this.getName() + " picked a card from the deck");
-            Game.PICK_ONCE_FROM_DECK = false;
-            Game.PICK_COUNT++;
+            AI_PICK_ONCE_FROM_DECK = false;
+            AI_PICK_COUNT++;
+            playerCanPickCardFromDeck = true;
             return this.playCard();
         }
 
-        if (Game.isValidCard(pickFromDeckIfNoValidCardInHand, Game.pile)) {
+        if (User.isValidCard(pickFromDeckIfNoValidCardInHand, pile)) {
             System.out.println(this.getName() + " picked and played " + pickFromDeckIfNoValidCardInHand);
             this.getHand().remove(pickFromDeckIfNoValidCardInHand);
             return pickFromDeckIfNoValidCardInHand;
@@ -67,7 +111,7 @@ public class AI extends User {
                 aiIsThinking();
             }
             case 20 -> {
-                System.out.println("I am so winning this...");
+                System.out.println("Whatever it takes to win this, huh...");
                 aiIsThinking();
             }
             case 30 -> {
