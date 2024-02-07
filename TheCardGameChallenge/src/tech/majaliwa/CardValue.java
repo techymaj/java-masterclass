@@ -1,19 +1,7 @@
 package tech.majaliwa;
 
-public enum CardValue {
-    TWO,
-    THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT,
-    NINE,
-    TEN,
-    JAY,
-    QUEEN,
-    KING,
-    ACE,
-    KIZIKIZA,
-    JOKER
+public record CardValue(int two, int three, int four, int five, int six,
+                        int seven, int eight,int nine, int ten, int jack, int queen, int king,
+                        int ace, int kizikiza, int joker){
+
 }

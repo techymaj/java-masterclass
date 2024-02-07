@@ -21,16 +21,31 @@ public class Deck {
     public static ArrayList<Card> createDeck(boolean isCLASSIC) {
         var deck = new Deck(isCLASSIC);
         var deckOfCards = new ArrayList<>(deck.getCards());
+        int[] cardValues = {20, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15};
 
-        for (int rank = 0; rank <= 12; rank++) {
-            deckOfCards.add(new Card(Face.getFace(rank),Suit.HEARTS, CardValue.values()[rank]));
-            deckOfCards.add(new Card(Face.getFace(rank),Suit.SPADES, CardValue.values()[rank]));
-            deckOfCards.add(new Card(Face.getFace(rank),Suit.CLUBS, CardValue.values()[rank]));
-            deckOfCards.add(new Card(Face.getFace(rank),Suit.DIAMONDS, CardValue.values()[rank]));
+        for (int i = 0; i <= 12; i++) {
+            if (isCLASSIC && i == 1) {
+                deckOfCards.add(new Card(Face.getFace(i), Suit.HEARTS, 30));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.SPADES, 30));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.CLUBS, 30));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.DIAMONDS, 30));
+                continue;
+            }
+            if (i == 12) {
+                deckOfCards.add(new Card(Face.getFace(i), Suit.SPADES, 60));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.HEARTS, 15));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.CLUBS, 15));
+                deckOfCards.add(new Card(Face.getFace(i), Suit.DIAMONDS, 15));
+            }
+            deckOfCards.add(new Card(Face.getFace(i), Suit.SPADES, cardValues[i]));
+            deckOfCards.add(new Card(Face.getFace(i), Suit.HEARTS, cardValues[i]));
+            deckOfCards.add(new Card(Face.getFace(i), Suit.CLUBS, cardValues[i]));
+            deckOfCards.add(new Card(Face.getFace(i), Suit.DIAMONDS, cardValues[i]));
         }
+
         if (isCLASSIC) {
-            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_F, CardValue.values()[13]));
-            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_M, CardValue.values()[13]));
+            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_F, 50));
+            deckOfCards.add(new Card(Face.getFace(13),Suit.JOKER_M, 50));
         }
 
         return deckOfCards;
