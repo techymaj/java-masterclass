@@ -23,7 +23,7 @@ public class Game {
 
         var scanner = setGameMode();
 
-        deck = Deck.createDeck(Rules.isCLASSIC);
+        deck = Deck.createDeck(Rules.JOKER_MODE);
         Deck.printDeck("Deck of Cards", deck, 4);
         System.out.println("Size of deck: " + deck.size());
 
@@ -54,23 +54,23 @@ public class Game {
     }
 
     private static Scanner setGameMode() {
-        System.out.println("Do you want to play in classic mode? (y/n). Enter 'e' to exit the game");
+        System.out.println("Do you want to play in Joker mode? (y/n). Enter 'e' to exit the game");
 
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
 
         switch (answer.toLowerCase()) {
             case "y", "yes" -> {
-                Rules.isCLASSIC = true;
-                System.out.println(Rules.CLASSIC);
+                Rules.JOKER_MODE = true;
+                System.out.println(Rules.JOKER);
             }
             case "e", "exit" -> {
                 System.out.println("Have a good day!");
                 System.exit(0);
             }
             case "n", "no" -> {
-                Rules.isCLASSIC = false;
-                System.out.println(Rules.NOT_CLASSIC);
+                Rules.JOKER_MODE = false;
+                System.out.println(Rules.CLASSIC);
             }
             default -> {
                 System.out.println("Invalid input. Enter 'e' to exit or 'y' or 'n' to continue");
