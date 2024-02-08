@@ -47,8 +47,8 @@ public class User implements UserInterface {
         deck.subList(0, 7).clear();
     }
 
-    static void pickCard(User user, ArrayList<Card> deck) {
-        var cardToPick = UserInterface.pickCard(deck);
+    static void pickCard(User user) {
+        var cardToPick = UserInterface.pickCard();
 
         if (cardToPick == null) {
             Game.reshuffleDeckAndContinuePlaying();
@@ -119,14 +119,21 @@ public class User implements UserInterface {
         if (Rules.JOKER_MODE) {
             switch (currentFace) {
                 case TWO, THREE, JOKER -> {
+                    playerCannotPickOrPass();
                     return true;
                 }
             }
         } else {
+            playerCannotPickOrPass();
             return Objects.requireNonNull(currentFace) == Face.TWO;
         }
 
         return false;
+    }
+
+    private static void playerCannotPickOrPass() {
+        playerCanPassAfterPickingOrPlayingCard = false;
+        playerCanPickCardFromDeck = false;
     }
 
     static void userChoosesAction(User user, boolean userCanPickCardFromDeck) {

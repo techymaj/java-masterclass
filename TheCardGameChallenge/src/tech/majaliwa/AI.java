@@ -17,14 +17,8 @@ public class AI extends User {
         enforcePassRule();
         while (true) {
             System.out.println("AI's turn");
-            if (AI_TAKES_DAMAGE) {
-                var face = pile.getLast();
-                var currentFace = face.face();
+//            System.out.println(ai.getHand());
 
-                takeDamage(ai, deck, currentFace);
-                playerCanPickCardFromDeck = true;
-                break;
-            }
             var cardPlayed = ai.playCard();
             var isValidCard = isValidCard(cardPlayed, pile);
             if (!isValidCard) {
@@ -34,7 +28,20 @@ public class AI extends User {
             System.out.println("*".repeat(25));
             System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
             System.out.println("*".repeat(25));
+
+            if (AI_TAKES_DAMAGE) {
+                var face = pile.getLast();
+                var currentFace = face.face();
+
+                if (damageCountered(ai, pile, cardPlayed)) break;
+
+                takeDamage(ai, deck, currentFace);
+                resetDamageRules();
+                break;
+            }
+
             if (cardPlayed != null) {
+
                 addToPile(cardPlayed, pile);
                 var opponentShouldPickFromDeck = ai.checkIfOpponentShouldPickFromDeck(cardPlayed);
                 if (opponentShouldPickFromDeck) {
@@ -42,6 +49,7 @@ public class AI extends User {
                     break;
                 }
             }
+
             checkIfPlayerWon(ai);
             var canFollowCard = ai.checkIfCanFollowCard();
             if (canFollowCard) {
@@ -49,6 +57,57 @@ public class AI extends User {
             }
             break;
         }
+    }
+
+    private static boolean damageCountered(AI ai, ArrayList<Card> pile, Card cardPlayed) {
+        if (cardPlayed != null) {
+            var damageCardOnTop = checkIfDamageCard();
+            var counterCardPlayed = damageCountered(ai, pile, damageCardOnTop, cardPlayed);
+            if (counterCardPlayed) return true;
+
+            addToPile(cardPlayed, pile);
+            var opponentShouldPickFromDeck = ai.checkIfOpponentShouldPickFromDeck(cardPlayed);
+            if (opponentShouldPickFromDeck) {
+                enforceDamageRules();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean damageCountered(User user, ArrayList<Card> pile, boolean damageCardOnTop, Card cardPlayed) {
+        if (damageCardOnTop && cardPlayed.face().equals(Face.TWO)) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = true;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.THREE)) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = true;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.JOKER)) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = true;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.ACE) && cardPlayed.suit().equals(Suit.SPADES)) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = true;
+            checkIfPlayerWon(user);
+            return true;
+        }
+        return false;
     }
 
     public Card playCard() {
@@ -70,7 +129,7 @@ public class AI extends User {
             randomizeThought();
         }
 
-        var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard(deck);
+        var pickFromDeckIfNoValidCardInHand = UserInterface.pickCard();
 
         if (pickFromDeckIfNoValidCardInHand == null) {
             Game.reshuffleDeckAndContinuePlaying();
@@ -89,6 +148,7 @@ public class AI extends User {
         if (User.isValidCard(pickFromDeckIfNoValidCardInHand, pile)) {
             System.out.println(this.getName() + " picked and played " + pickFromDeckIfNoValidCardInHand);
             this.getHand().remove(pickFromDeckIfNoValidCardInHand);
+            playerCanPickCardFromDeck = true;
             return pickFromDeckIfNoValidCardInHand;
         }
 

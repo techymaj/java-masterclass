@@ -1,9 +1,9 @@
 package tech.majaliwa;
 
-import java.util.ArrayList;
+import static tech.majaliwa.Game.deck;
 
 public interface UserInterface {
-    static Card pickCard(ArrayList<Card> deck) {
+    static Card pickCard() {
         if (deck.isEmpty()) {
             return null;
         }

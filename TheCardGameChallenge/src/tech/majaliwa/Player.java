@@ -39,7 +39,7 @@ public class Player extends User {
                 continue;
             }
             if (inputIsPickCard) {
-                pickCard(player, deck);
+                pickCard(player);
                 continue;
             } else {
                 var inputIsPass = input.equalsIgnoreCase("pass");
@@ -59,7 +59,6 @@ public class Player extends User {
             break; // pass your turn
         } while (true);
     }
-
 
 
     @Override
@@ -115,7 +114,7 @@ public class Player extends User {
         if (!damageCardOnTop) {
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = false;
+            playerCanPassAfterPickingOrPlayingCard = true;
             checkIfPlayerWon(user);
         }
 
@@ -143,7 +142,6 @@ public class Player extends User {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = false;
             checkIfPlayerWon(user);
             return true;
         }
@@ -152,7 +150,6 @@ public class Player extends User {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = false;
             checkIfPlayerWon(user);
             return true;
         }
@@ -161,7 +158,6 @@ public class Player extends User {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = false;
             checkIfPlayerWon(user);
             return true;
         }
@@ -169,7 +165,6 @@ public class Player extends User {
         if (damageCardOnTop && cardPlayed.face().equals(Face.ACE) && cardPlayed.suit().equals(Suit.SPADES)) {
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = false;
             checkIfPlayerWon(user);
             return true;
         }

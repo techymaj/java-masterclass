@@ -123,8 +123,6 @@ public class Game {
             EXIT_GAME = false;
             setGameMode();
             gameUsers(player, ai);
-            player.setInitialHand(deck);
-            ai.setInitialHand(deck);
             gameInSession(player, ai, deck, pile);
         } else if (input.equalsIgnoreCase("n")) {
             System.out.println("Thanks for playing!");
