@@ -13,6 +13,7 @@ public class Player extends User {
 
     static void player_s_Turn(Player player, ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
         AI_TAKES_DAMAGE = false;
+
         do {
             userChoosesAction(player, playerCanPickCardFromDeck);
             var input = scanner.nextLine();
@@ -52,7 +53,7 @@ public class Player extends User {
                         continue;
                     }
                 } else {
-                    if (cardNotPlayed(player, pile, input)) continue;
+                    if (cardPlayed(player, pile, input)) continue;
                 }
             }
             break; // pass your turn
@@ -80,7 +81,7 @@ public class Player extends User {
         return cardToPlay;
     }
 
-    static boolean cardNotPlayed(Player player, ArrayList<Card> pile, String input) {
+    static boolean cardPlayed(Player player, ArrayList<Card> pile, String input) {
         try {
             var numberIsGreaterThanHandSize = Integer.parseInt(input) > player.getHand().size();
             var numberIsLessThanHandSize = Integer.parseInt(input) < 1;
@@ -94,6 +95,84 @@ public class Player extends User {
             return true;
         }
 
-        return cardIsNotPlayed(player, pile, input);
+        return player.cardIsPlayed(player, pile, input);
+    }
+
+    private boolean cardIsPlayed(User user, ArrayList<Card> pile, String input) {
+        var damageCardOnTop = checkIfDamageCard();
+        var chosenCard = Integer.parseInt(input);
+        var cardPlayed = user.playCard(chosenCard);
+        var isValidCard = isValidCard(cardPlayed, pile);
+
+        if (!isValidCard) {
+            System.out.println("Invalid card. Try again");
+            getPile(pile);
+            return true;
+        }
+
+        if (damageCountered(user, pile, damageCardOnTop, cardPlayed)) return false;
+
+        if (!damageCardOnTop) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = false;
+            checkIfPlayerWon(user);
+        }
+
+        var canFollowCard = user.checkIfCanFollowCard();
+
+        if (canFollowCard) {
+            System.out.println("You can follow this card with another valid card");
+            playerCanPickCardFromDeck = true;
+            return true;
+        }
+
+        var opponentShouldPickFromDeck = user.checkIfOpponentShouldPickFromDeck(cardPlayed);
+
+        if (opponentShouldPickFromDeck) {
+            // a.i picks from deck
+            AI_TAKES_DAMAGE = true;
+            return false;
+        }
+
+        return false;
+    }
+
+    private static boolean damageCountered(User user, ArrayList<Card> pile, boolean damageCardOnTop, Card cardPlayed) {
+        if (damageCardOnTop && cardPlayed.face().equals(Face.TWO)) {
+            AI_TAKES_DAMAGE = true;
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = false;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.THREE)) {
+            AI_TAKES_DAMAGE = true;
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = false;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.JOKER)) {
+            AI_TAKES_DAMAGE = true;
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = false;
+            checkIfPlayerWon(user);
+            return true;
+        }
+
+        if (damageCardOnTop && cardPlayed.face().equals(Face.ACE) && cardPlayed.suit().equals(Suit.SPADES)) {
+            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+            addToPile(cardPlayed, pile);
+            playerCanPassAfterPickingOrPlayingCard = false;
+            checkIfPlayerWon(user);
+            return true;
+        }
+        return false;
     }
 }

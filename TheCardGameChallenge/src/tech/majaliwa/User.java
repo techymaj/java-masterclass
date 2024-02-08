@@ -2,6 +2,7 @@ package tech.majaliwa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static tech.majaliwa.Game.*;
@@ -89,19 +90,6 @@ public class User implements UserInterface {
             var canPlayJoker_F = previousSuit.equals(Suit.HEARTS) || previousSuit.equals(Suit.DIAMONDS);
             var canPlayJoker_M = previousSuit.equals(Suit.SPADES) || previousSuit.equals(Suit.CLUBS);
 
-            if (previousFace.equals(Face.TWO) && (currentFace.equals(Face.TWO)
-                    || currentFace.equals(Face.THREE))) {
-                return true;
-            }
-
-            if (previousFace.equals(Face.THREE) && currentFace.equals(Face.THREE)) {
-                return true;
-            }
-
-            if (previousFace.equals(Face.JOKER) && currentFace.equals(Face.JOKER)) {
-                return true;
-            }
-
             if (previousCardIsJoker_F && canPlayOnTopOfJoker_F) {
                 return true; // play hearts or diamonds on top of joker F
             }
@@ -120,6 +108,25 @@ public class User implements UserInterface {
 
             return currentFace.equals(previousFace) || currentSuit.equals(previousSuit); // play if face or suit matches
         }
+    }
+
+    public static boolean checkIfDamageCard() {
+        if (pile.isEmpty()) return false;
+
+        var cardOnTop = pile.getLast();
+        var currentFace = cardOnTop.face();
+
+        if (Rules.JOKER_MODE) {
+            switch (currentFace) {
+                case TWO, THREE, JOKER -> {
+                    return true;
+                }
+            }
+        } else {
+            return Objects.requireNonNull(currentFace) == Face.TWO;
+        }
+
+        return false;
     }
 
     static void userChoosesAction(User user, boolean userCanPickCardFromDeck) {
@@ -156,33 +163,6 @@ public class User implements UserInterface {
         }
 
         return cardToPlay;
-    }
-
-    static boolean cardIsNotPlayed(User user, ArrayList<Card> pile, String input) {
-        var chosenCard = Integer.parseInt(input);
-        var cardPlayed = user.playCard(chosenCard);
-        var isValidCard = isValidCard(cardPlayed, pile);
-        if (!isValidCard) {
-            System.out.println("Invalid card. Try again");
-            getPile(pile);
-            return true;
-        }
-        System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
-        addToPile(cardPlayed, pile);
-        playerCanPassAfterPickingOrPlayingCard = false;
-        checkIfPlayerWon(user);
-        var canFollowCard = user.checkIfCanFollowCard();
-        if (canFollowCard) {
-            System.out.println("You can follow this card with another valid card");
-            return true;
-        }
-        var opponentShouldPickFromDeck = user.checkIfOpponentShouldPickFromDeck(cardPlayed);
-        if (opponentShouldPickFromDeck) {
-            // a.i picks from deck
-            AI_TAKES_DAMAGE = true;
-            return false;
-        }
-        return false;
     }
 
     public boolean checkIfCanFollowCard() {

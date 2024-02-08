@@ -22,6 +22,7 @@ public class AI extends User {
                 var currentFace = face.face();
 
                 takeDamage(ai, deck, currentFace);
+                playerCanPickCardFromDeck = true;
                 break;
             }
             var cardPlayed = ai.playCard();

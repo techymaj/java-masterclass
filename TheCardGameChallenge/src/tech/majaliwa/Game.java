@@ -112,15 +112,20 @@ public class Game {
     static void restartGame(ArrayList<Card> deck, ArrayList<Card> pile, Scanner scanner) {
         System.out.println();
         System.out.println("Do you want to play again? (y/n)");
+        var player = users.get(0);
+        var ai = users.get(1);
         var input = scanner.nextLine();
+
         if (input.equalsIgnoreCase("y")) {
             System.out.println("Restarting game...");
             pile.clear();
             deck.clear();
             EXIT_GAME = false;
             setGameMode();
-            gameUsers(users.get(0), users.get(1));
-            gameInSession(users.get(0), users.get(1), deck, pile);
+            gameUsers(player, ai);
+            player.setInitialHand(deck);
+            ai.setInitialHand(deck);
+            gameInSession(player, ai, deck, pile);
         } else if (input.equalsIgnoreCase("n")) {
             System.out.println("Thanks for playing!");
             System.exit(0);
