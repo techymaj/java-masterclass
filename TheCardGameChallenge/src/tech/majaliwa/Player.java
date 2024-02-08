@@ -109,14 +109,15 @@ public class Player extends User {
             return true;
         }
 
-        if (damageCountered(user, pile, damageCardOnTop, cardPlayed)) return false;
-
-        if (!damageCardOnTop) {
-            System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
-            addToPile(cardPlayed, pile);
-            playerCanPassAfterPickingOrPlayingCard = true;
-            checkIfPlayerWon(user);
+        if (damageCardOnTop) {
+            var damageCountered = damageCountered(user, pile, cardPlayed);
+            return !damageCountered;
         }
+
+        System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
+        addToPile(cardPlayed, pile);
+        playerCanPassAfterPickingOrPlayingCard = true;
+        checkIfPlayerWon(user);
 
         var canFollowCard = user.checkIfCanFollowCard();
 
@@ -137,8 +138,8 @@ public class Player extends User {
         return false;
     }
 
-    private static boolean damageCountered(User user, ArrayList<Card> pile, boolean damageCardOnTop, Card cardPlayed) {
-        if (damageCardOnTop && cardPlayed.face().equals(Face.TWO)) {
+    private static boolean damageCountered(User user, ArrayList<Card> pile, Card cardPlayed) {
+        if (cardPlayed.face().equals(Face.TWO)) {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
@@ -146,7 +147,7 @@ public class Player extends User {
             return true;
         }
 
-        if (damageCardOnTop && cardPlayed.face().equals(Face.THREE)) {
+        if (cardPlayed.face().equals(Face.THREE)) {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
@@ -154,7 +155,7 @@ public class Player extends User {
             return true;
         }
 
-        if (damageCardOnTop && cardPlayed.face().equals(Face.JOKER)) {
+        if (cardPlayed.face().equals(Face.JOKER)) {
             AI_TAKES_DAMAGE = true;
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
@@ -162,7 +163,7 @@ public class Player extends User {
             return true;
         }
 
-        if (damageCardOnTop && cardPlayed.face().equals(Face.ACE) && cardPlayed.suit().equals(Suit.SPADES)) {
+        if (cardPlayed.face().equals(Face.ACE) && cardPlayed.suit().equals(Suit.SPADES)) {
             System.out.println(user.getName() + "'s remaining cards " + user.getHand().size());
             addToPile(cardPlayed, pile);
             checkIfPlayerWon(user);

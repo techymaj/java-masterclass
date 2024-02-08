@@ -18,6 +18,24 @@ public class AI extends User {
         while (true) {
             System.out.println("AI's turn");
 //            System.out.println(ai.getHand());
+            if (AI_TAKES_DAMAGE) {
+                var face = pile.getLast();
+                var currentFace = face.face();
+
+                for (var card : ai.getHand()) {
+                    var counterCardExists = card.face().equals(currentFace);
+                    var gotAceOfSpades = card.face().equals(Face.ACE) && card.suit().equals(Suit.SPADES);
+                    if (counterCardExists || gotAceOfSpades) {
+                        var cardPlayed = ai.playCard();
+                        var countered = damageCountered(ai, pile, cardPlayed);
+                        if (countered) break;
+                    }
+                }
+
+                takeDamage(ai, deck, currentFace);
+                resetDamageRules();
+                break;
+            }
 
             var cardPlayed = ai.playCard();
             var isValidCard = isValidCard(cardPlayed, pile);
@@ -28,17 +46,6 @@ public class AI extends User {
             System.out.println("*".repeat(25));
             System.out.println(ai.getName() + "'s remaining cards " + ai.getHand().size());
             System.out.println("*".repeat(25));
-
-            if (AI_TAKES_DAMAGE) {
-                var face = pile.getLast();
-                var currentFace = face.face();
-
-                if (damageCountered(ai, pile, cardPlayed)) break;
-
-                takeDamage(ai, deck, currentFace);
-                resetDamageRules();
-                break;
-            }
 
             if (cardPlayed != null) {
 
