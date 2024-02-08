@@ -28,13 +28,24 @@ public class Game {
         System.out.println();
 
         var scanner = setGameMode();
+        System.out.println("Enter your player name");
+        String playerName = scanner.nextLine();
 
+        var player = new Player(playerName);
+        var AI = new AI("AI");
+        users.add(player);
+        users.add(AI);
+
+        gameUsers(player, AI);
+
+        gameInSession(player, AI, deck, pile);
+        scanner.close();
+    }
+
+    private static <T extends User> void gameUsers(T player, T ai) {
         deck = Deck.createDeck(Rules.JOKER_MODE);
         printDeck("Deck of Cards", deck, 4);
         System.out.println("Size of deck: " + deck.size());
-
-        System.out.println("Enter your player name");
-        String playerName = scanner.nextLine();
 
         System.out.println();
         System.out.println("---------- Game in session ----------");
@@ -43,18 +54,10 @@ public class Game {
         System.out.println("Shuffling deck...");
         Collections.shuffle(deck);
 
-        var player = new Player(playerName);
-        var AI = new AI("AI");
-        users.add(player);
-        users.add(AI);
-
         System.out.println("Dealing cards...");
         player.setInitialHand(deck);
-        AI.setInitialHand(deck);
+        ai.setInitialHand(deck);
         System.out.println("Size of deck: " + deck.size());
-
-        gameInSession(player, AI, deck, pile);
-        scanner.close();
     }
 
     public void startGame() {
@@ -63,9 +66,9 @@ public class Game {
 
     private static Scanner setGameMode() {
         System.out.println("Do you want to play in Joker mode? (y/n). Enter 'e' to exit the game");
-
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.nextLine();
+        System.out.println();
 
         switch (answer.toLowerCase()) {
             case "y", "yes" -> {
@@ -85,6 +88,7 @@ public class Game {
                 return setGameMode();
             }
         }
+
         return scanner;
     }
 
@@ -115,6 +119,7 @@ public class Game {
             deck.clear();
             EXIT_GAME = false;
             setGameMode();
+            gameUsers(users.get(0), users.get(1));
             gameInSession(users.get(0), users.get(1), deck, pile);
         } else if (input.equalsIgnoreCase("n")) {
             System.out.println("Thanks for playing!");

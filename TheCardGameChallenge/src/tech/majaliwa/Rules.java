@@ -12,14 +12,18 @@ public class Rules {
         If you pick up a card that you can't play, you must keep it and let the next player play""";
 
     public static String JOKER = """
+                    ------------------------------------------------------------
                     You are now playing in classic mode.
                     In classic mode, the deck is made up of 54 cards.
                     The extra cards are two jokers valued at 50 each.
-                    The Ace of spades holds the highest value in the deck (60).""";
+                    The Ace of spades holds the highest value in the deck (60).
+                    ------------------------------------------------------------""";
 
     public static String CLASSIC = """
+                    ------------------------------------------------------------
                     You are now playing in normal mode.
                     In normal mode, the deck is made up of 52 cards.
                     The deck does not have jokers.
-                    The Ace of spades holds the highest value in the deck (60).""";
+                    The Ace of spades holds the highest value in the deck (60).
+                    ------------------------------------------------------------""";
 }
