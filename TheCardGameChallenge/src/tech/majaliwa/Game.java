@@ -148,7 +148,7 @@ public class Game {
     }
 
     static void reshuffleDeckAndContinuePlaying() {
-        var getLastCard = pile.get(pile.size() - 1);
+        var getLastCard = pile.getLast();
         System.out.println("There is nothing left in the deck");
         System.out.println("Shuffling the pile...");
         Collections.shuffle(pile);

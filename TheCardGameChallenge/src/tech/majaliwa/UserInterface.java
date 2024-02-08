@@ -7,8 +7,8 @@ public interface UserInterface {
         if (deck.isEmpty()) {
             return null;
         }
-        var cardToPick = deck.get(0);
-        deck.remove(0);
+        var cardToPick = deck.getFirst();
+        deck.removeFirst();
         return cardToPick;
     }
 }

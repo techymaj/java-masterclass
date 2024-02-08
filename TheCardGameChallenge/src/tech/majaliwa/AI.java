@@ -18,7 +18,7 @@ public class AI extends User {
         while (true) {
             System.out.println("AI's turn");
             if (AI_TAKES_DAMAGE) {
-                var face = pile.get(pile.size() - 1);
+                var face = pile.getLast();
                 var currentFace = face.face();
 
                 takeDamage(ai, deck, currentFace);

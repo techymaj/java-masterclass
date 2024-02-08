@@ -71,14 +71,14 @@ public class User implements UserInterface {
         if (pile.isEmpty()) {
             return true; // Any card can be played if the pile is empty
         } else {
-            var previousFace = pile.get(pile.size() - 1).face();
+            var previousFace = pile.getLast().face();
             var currentFace = card.face();
 
-            var previousSuit = pile.get(pile.size() - 1).suit();
+            var previousSuit = pile.getLast().suit();
             var currentSuit = card.suit();
 
-            var previousCardIsJoker_F = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_F);
-            var previousCardIsJoker_M = pile.get(pile.size() - 1).suit().equals(Suit.JOKER_M);
+            var previousCardIsJoker_F = pile.getLast().suit().equals(Suit.JOKER_F);
+            var previousCardIsJoker_M = pile.getLast().suit().equals(Suit.JOKER_M);
 
             var currentCardIsJoker_F = card.suit().equals(Suit.JOKER_F);
             var currentCardIsJoker_M = card.suit().equals(Suit.JOKER_M);
@@ -186,7 +186,7 @@ public class User implements UserInterface {
     }
 
     public boolean checkIfCanFollowCard() {
-        var cardOnTopOfPile = pile.get(pile.size() - 1);
+        var cardOnTopOfPile = pile.getLast();
         var currentFace = cardOnTopOfPile.face();
         switch (currentFace) {
             case JACK, EIGHT -> {
@@ -337,7 +337,7 @@ public class User implements UserInterface {
         System.out.println("Deck size --> " + deck.size());
         System.out.println("-".repeat(25));
         if (!pile.isEmpty()) {
-            System.out.println("Top of the pile: " + pile.get(pile.size() - 1));
+            System.out.println("Top of the pile: " + pile.getLast());
         } else {
             System.out.println("Pile is empty");
         }

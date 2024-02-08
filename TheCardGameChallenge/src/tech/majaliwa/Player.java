@@ -20,7 +20,7 @@ public class Player extends User {
             var inputIsAcceptDamage = input.equalsIgnoreCase("accept");
 
             if (inputIsAcceptDamage) {
-                var face = pile.get(pile.size() - 1);
+                var face = pile.getLast();
                 var currentFace = face.face();
 
                 takeDamage(player, deck, currentFace);

@@ -5,8 +5,6 @@ public record Card(
         Suit suit,
         int cardValue
 ) {
-
-
     @Override
     public String toString() {
         return face.getFace() + this.suit.getUnicode();
