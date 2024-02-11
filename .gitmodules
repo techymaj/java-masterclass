@@ -1,3 +1,6 @@
 [submodule "BillBurgersChallenge"]
 	path = BillBurgersChallenge
 	url = https://github.com/techymaj/bill-burgers-challenge.git
+[submodule "Matatu"]
+	path = Matatu
+	url = https://github.com/techymaj/matatu.git
