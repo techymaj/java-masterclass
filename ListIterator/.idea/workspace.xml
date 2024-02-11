@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60422bd1-5dd0-40e1-b721-edfc50f63124" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../CollectionsMethods/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+    <list default="true" id="a16e8048-50e7-472c-bd3f-a3285e429680" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../Collections/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Collections/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/Contact.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/Contact.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/ContactData.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/ContactData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PhoneAndEmailContacts/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,14 +27,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
+  "associatedIndex": 3
 }]]></component>
-  <component name="ProjectId" id="2bh4cwh4Gp9MCTkSRyrrpEeP1c7" />
+  <component name="ProjectId" id="2bzb7mjuEz3u6dTjPhJlnHMbbxP" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -41,11 +45,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="60422bd1-5dd0-40e1-b721-edfc50f63124" name="Changes" comment="" />
-      <created>1706654059786</created>
+      <changelist id="a16e8048-50e7-472c-bd3f-a3285e429680" name="Changes" comment="" />
+      <created>1707220690106</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1706654059786</updated>
+      <updated>1707220690106</updated>
     </task>
     <servers />
   </component>
