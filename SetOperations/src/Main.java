@@ -34,5 +34,13 @@ public class Main {
 
         System.out.println(epl);
         System.out.println(ucl);
+
+        System.out.println("-----------------");
+        // removeAll() method to form a difference set
+        // in the ucl set, remove everything that is in the epl set
+        ucl.removeAll(epl);
+
+        System.out.println(epl);
+        System.out.println(ucl);
     }
 }
