@@ -19,6 +19,16 @@ public class Main {
         var difference = difference();
         System.out.println("--- Difference Set ---");
         System.out.println(difference);
+        System.out.println();
+
+        var notInBoth = new HashSet<>(champions); // Create a copy of the champions set
+        notInBoth.removeAll(intersection); // Remove the elements in the intersection set
+        System.out.println("--- Not in Both ---");
+        System.out.println(notInBoth);
+        // another way to get the elements not in both sets
+//        champions.removeAll(intersection);
+//        System.out.println("--- Not in Both ---");
+//        System.out.println(champions);
     }
 
     private static Set<String> unionSet() {
@@ -84,4 +94,23 @@ public class Main {
         epl.removeAll(ucl);
         return epl;
     }
+
+//    private static Set<String> notInBoth() {
+//        Set<String> epl = new HashSet<>();
+//        epl.add("Arsenal");
+//        epl.add("Chelsea");
+//        epl.add("Manchester United");
+//        epl.add("Manchester City");
+//        epl.add("Liverpool");
+//        epl.add("Tottenham Hotspur");
+//
+//        Set<String> ucl = new HashSet<>();
+//        ucl.add("Real Madrid");
+//        ucl.add("Barcelona");
+//        ucl.add("Arsenal");
+//        ucl.add("Manchester City");
+//
+//        var notInBoth = unionSet().removeAll(intersectionSet());
+//        return notInBoth;
+//    }
 }
