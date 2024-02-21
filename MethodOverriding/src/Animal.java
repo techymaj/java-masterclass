@@ -18,6 +18,7 @@ class Human extends Animal {
 
     public static void main(String[] args) {
         Human human = new Human();
-        human.eat(); // This calls the eat() method in the Human class
+//        human.eat(); // This calls the eat() method in the Human class
+        super.eat();
     }
 }
