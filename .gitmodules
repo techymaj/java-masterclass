@@ -4,3 +4,6 @@
 [submodule "Matatu"]
 	path = Matatu
 	url = https://github.com/techymaj/matatu.git
+[submodule "MatatuHeroku"]
+	path = MatatuHeroku
+	url = https://github.com/techymaj/matatu.git

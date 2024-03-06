@@ -1,67 +1,77 @@
-public class Task implements Comparable {
+enum Priority {HIGH, MEDIUM, LOW}
 
-    @Override
-    public int compareTo(Object o) {
-        Task task = (Task) o;
+enum Status {IN_QUEUE, ASSIGNED, IN_PROGRESS}
 
-        // sort by project name and then by task description
-        return (this.projectName + this.taskDescription)
-                .compareTo(task.projectName + task.taskDescription);
-    }
+public class Task implements Comparable<Task> {
 
-    enum Status {
-        ASSIGNED, IN_PROGRESS, NOT_YET_ASSIGNED
-    }
-
-    enum Priority {
-        HIGH, MEDIUM, LOW
-    }
-
+    private String project;
+    private String description;
     private String assignee;
-    private String projectName;
-    private String taskDescription;
-    private Status status;
     private Priority priority;
+    private Status status;
 
-    public Task(String assignee, String projectName, String taskDescription, Status status, Priority priority) {
+    public Task(String project, String description, String assignee, Priority priority,
+                Status status) {
+        this.project = project;
+        this.description = description;
         this.assignee = assignee;
-        this.projectName = projectName;
-        this.taskDescription = taskDescription;
-        this.status = status;
         this.priority = priority;
+        this.status = status;
     }
 
-    public Task(String assignee, String projectName, String taskDescription, Priority priority) {
-        this(assignee, projectName, taskDescription, assignee == null ? Status.IN_PROGRESS : Status.ASSIGNED, priority);
+    public Task(String project, String description, String assignee, Priority priority) {
+        this(project, description, assignee, priority,
+                assignee == null ? Status.IN_QUEUE : Status.ASSIGNED);
     }
 
-    public Task(String projectName, String taskDescription, Priority priority) {
-        this(null, projectName, taskDescription, priority);
+    public Task(String project, String description, Priority priority) {
+        this(project, description, null, priority);
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAssignee() {
+        return assignee;
     }
 
     public void setAssignee(String assignee) {
         this.assignee = assignee;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public void setTaskDescription(String taskDescription) {
-        this.taskDescription = taskDescription;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    public Priority getPriority() {
+        return priority;
     }
 
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "%-20s %-25s %-10s %-10s %s".formatted(assignee, projectName, taskDescription, status, priority);
+        return "%-20s %-25s %-10s %-10s %s".formatted(project, description, priority,
+                assignee, status);
     }
 
     @Override
@@ -71,14 +81,24 @@ public class Task implements Comparable {
 
         Task task = (Task) o;
 
-        if (!projectName.equals(task.projectName)) return false;
-        return taskDescription.equals(task.taskDescription);
+        if (!getProject().equals(task.getProject())) return false;
+        return getDescription().equals(task.getDescription());
     }
 
     @Override
     public int hashCode() {
-        int result = projectName.hashCode();
-        result = 31 * result + taskDescription.hashCode();
+        int result = getProject().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        return result;
+    }
+
+    @Override
+    public int compareTo(Task o) {
+
+        int result = this.project.compareTo(o.project);
+        if (result == 0) {
+            result = this.description.compareTo(o.description);
+        }
         return result;
     }
 }
