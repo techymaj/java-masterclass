@@ -22,7 +22,7 @@ public class Main {
         var union = getUnion(listOfSets);
         sortAndPrint("UNION", union);
 
-        
+
         var intersection = getIntersect(getBobs, getAnns);
         sortAndPrint("Intersection of bob and ann's tasks", intersection);
 
@@ -65,13 +65,14 @@ public class Main {
     }
 
     public static Set<Task> getIntersect(Set<Task> set1, Set<Task> set2) {
-        set1.retainAll(set2);
-        return set1;
+        var intersect = new HashSet<>(set1);
+        intersect.retainAll(set2);
+        return intersect;
     }
 
     public static Set<Task> getDifference(Set<Task> set1, Set<Task> set2) {
-        set2.removeAll(set1);
-        return set2;
+        var difference = new HashSet<>(set1);
+        difference.removeAll(set2);
+        return difference;
     }
-
 }
