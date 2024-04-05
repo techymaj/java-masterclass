@@ -54,21 +54,24 @@ public class RMIClient implements Broadcast {
     }
 
     private void aClientJoinsGroup() {
-        MsgHandler handler = (sender, msg) -> {
-            System.out.println("Received message from " + sender + ": " + new String(msg));
-        };
         try {
-            Group group = new Group("localhost", handler, "client");
+            Group group = new Group("localhost", null, "client");
             new Thread(group).start();
             System.out.println("Joined group.");
             si.registerClient(this); // register client for broadcast
+            System.out.println("Enter a message to send to the group.");
             while (true) {
+                MsgHandler handler = (count, msg) -> {
+                    SequencerImpl.updateClients(msg, this);
+                };
+
                 var input = groupScanner.nextLine();
                 if (input.equals("exit")) {
                     group.leave();
                     break;
                 }
                 group.send(input.getBytes());
+                handler.handle(1, input.getBytes());
             }
         } catch (Group.GroupException e) {
             throw new RuntimeException(e);
@@ -109,6 +112,6 @@ public class RMIClient implements Broadcast {
 
     @Override
     public void update(byte[] msg) throws RemoteException {
-//        System.out.println("Received message: " + new String(msg));
+        System.out.println("Received message: " + new String(msg));
     }
 }

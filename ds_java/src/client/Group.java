@@ -1,14 +1,11 @@
 package client;
 
 import server.SequencerImpl;
-import shared.Broadcast;
 import shared.Sequencer;
 import shared.SequencerException;
 
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Group implements Runnable {
 

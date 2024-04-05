@@ -9,5 +9,12 @@ class Angel extends God {
     public static void main(String[] args) {
         God angel = new Angel();
         angel.doGodlyStuff();
+
+        God god = new God() {
+            @Override
+            public void doGodlyStuff() {
+
+            }
+        };
     }
 }

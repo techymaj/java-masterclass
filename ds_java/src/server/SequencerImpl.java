@@ -1,6 +1,5 @@
 package server;
 
-import client.Group;
 import client.History;
 import client.Message;
 import shared.Broadcast;
@@ -15,12 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SequencerImpl implements Sequencer, Broadcast {
-
     public static long lastSequenceReceived;
     ArrayList<Message> clientMessages;
     ArrayList<History> histories;
     private InetAddress address;
-    static final int MAX_ENTRIES = 1024;
+    static final int MAX_ENTRIES = 3;
     public static List<Broadcast> clientsForBroadcast;
 
 
@@ -51,7 +49,7 @@ public class SequencerImpl implements Sequencer, Broadcast {
         History history = new History(sender, address, message);
         histories.add(history);
         messageHistoryManager();
-        updateClients(msg, this);
+        updateClients(msg,  this);
     }
 
     @Override
@@ -91,7 +89,7 @@ public class SequencerImpl implements Sequencer, Broadcast {
         clientsForBroadcast.add(clientToRegister);
     }
 
-    public void updateClients(byte[] result, Broadcast dontBroadcastToMe) {
+    public static void updateClients(byte[] result, Broadcast dontBroadcastToMe) {
         for (Broadcast client : SequencerImpl.clientsForBroadcast) {
             if(client.equals(dontBroadcastToMe)) continue;
 
