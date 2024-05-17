@@ -1,2 +1,4 @@
-package PACKAGE_NAME;public class AnotherAbstract {
+public abstract class AnotherAbstract extends Abstract {
+
+//    public abstract void abstractMethod();
 }

@@ -1,5 +1,7 @@
+package visibility;
+
 public class Visibility {
-    private String name;
+    String name;
 
     public void nameMe() {
         System.out.println(this.name);

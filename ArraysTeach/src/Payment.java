@@ -15,9 +15,9 @@ public class Payment {
         Scanner remy = new Scanner(System.in);
         for (int i = 0; i < 5; i++) {
             payments[i] = new Payment();
-            payments[i].workerName = remy.nextLine(); // '/n' is not consumed
-            payments[i].numDays = remy.nextInt();
-            remy.nextLine();
+            payments[i].workerName = remy.nextLine();
+            payments[i].numDays = remy.nextInt(); // '/n' is not consumed when you press enter
+            remy.nextLine(); // '/n' is consumed
             payments[i].printDetails();
         }
     }

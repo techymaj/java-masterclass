@@ -1,2 +1,4 @@
-package PACKAGE_NAME;public class Opio {
+public class Opio {
+    final int CityCouncilTax = 1000;
+    int rent;
 }

@@ -1,2 +1,4 @@
-package PACKAGE_NAME;public class FinalClass {
+public final class FinalClass {
 }
+
+//class Another extends FinalClass {}

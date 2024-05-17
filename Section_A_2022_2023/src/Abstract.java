@@ -1,2 +1,7 @@
-package PACKAGE_NAME;public class Abstract {
+public abstract class Abstract {
+
+    public static void main(String[] args) {
+
+//        Abstract object = new Abstract();
+    }
 }

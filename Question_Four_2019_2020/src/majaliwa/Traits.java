@@ -1,2 +1,4 @@
-package majaliwa;public interface Traits {
+package majaliwa;
+
+public interface Traits {
 }

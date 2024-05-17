@@ -1,2 +1,4 @@
-package majaliwa;public class Me {
+package majaliwa;
+
+public class Me {
 }

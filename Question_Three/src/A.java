@@ -1,2 +1,6 @@
-package PACKAGE_NAME;public interface A {
+public interface A {
+
+    double K = 1.5;
+
+    void mA(String value);
 }
