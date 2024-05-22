@@ -1,3 +1,5 @@
+import java.util.stream.Stream;
+
 public class Function {
 
     public static void main(String[] args) {
@@ -5,6 +7,7 @@ public class Function {
         MyFunction<String, Integer> me = age -> age + " years old";
         String IAM = me.apply(29);
         System.out.println(IAM);
+        
     }
 }
 
