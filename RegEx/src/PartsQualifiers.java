@@ -1,4 +1,4 @@
-public class Parts {
+public class PartsQualifiers {
 
     public static void main(String[] args) {
 
