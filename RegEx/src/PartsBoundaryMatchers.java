@@ -49,10 +49,10 @@ public class PartsBoundaryMatchers {
 //                .flatMap(line -> Arrays.stream(line.split("\\s+")))
 //                .filter(word -> word.matches("[a-zA-Z]+ble"))
 //                .forEach(System.out::println);
-        System.out.println(scanner.findInLine("[a-zA-Z]+ble"));
-        System.out.println(scanner.findInLine("[a-zA-Z]+ble"));
-        System.out.println(scanner.findInLine("[a-zA-Z]+ble"));
-        System.out.println(scanner.findInLine("[a-zA-Z]+ble")); // reached end of line
+        System.out.println(scanner.findInLine("\\p{Alnum}+ble\\p{Punct}?"));
+        System.out.println(scanner.findInLine("\\p{Alnum}+ble\\p{Punct}?"));
+        System.out.println(scanner.findInLine("\\p{Alnum}+ble\\p{Punct}?"));
+        System.out.println(scanner.findInLine("[a-zA-Z]+ble\\p{Punct}?")); // reached end of line
 //        while (scanner.hasNext()) {
 //            String element = scanner.next();
 //            System.out.println(element);
