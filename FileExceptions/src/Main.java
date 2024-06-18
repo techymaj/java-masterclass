@@ -25,8 +25,7 @@ public class Main {
         try {
             List<String> lines = Files.readAllLines(path);
         } catch (IOException e) {
-            System.out.println("Running catch..");
-            throw new RuntimeException(e);
+            int i = 1/0;
         } finally {
             System.out.println("Maybe i'll log something along the way");
         }
