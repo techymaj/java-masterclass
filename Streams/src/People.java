@@ -16,5 +16,7 @@ public class People {
         people.stream()
                 .filter(person -> person.gender.equals("M"))
                 .forEach(System.out::println);
+
+        people.stream().flatMap()
     }
 }
