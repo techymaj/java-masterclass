@@ -18,7 +18,7 @@ public class Main {
         String result = operator.apply("I ", "am");
         System.out.println(result);
 
-        Name myName = Main::fullName; // Unbounded M.R
+        Name myName = Main::fullName; // static M.R
         String s = myName.whoami("Majaliwa", "Mbuto", "Wilfried");
         System.out.println(s);
     }
