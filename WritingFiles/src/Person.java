@@ -8,8 +8,10 @@ public class Person {
     public static void main(String[] args) {
 
         Path path = Path.of("people.json");
+//        path.resolve(path)
         try {
             Files.writeString(path, toJSON().toString());
+//            Files.move()
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
