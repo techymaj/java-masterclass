@@ -1,21 +1,45 @@
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 public class Threads {
 
     public static void main(String[] args) {
 
-        var thread_one = new Thread();
-        var thread_two = new Thread(() -> {
-            System.out.println("Thread two");
-        });
-        Executor executor = (Runnable command) -> {
-                System.out.println("Executor");
-            };
+//        var thread_one = new Thread();
+//        var thread_two = new Thread(() -> {
+//            System.out.println("Thread two");
+//        });
 
-        System.out.println(thread_one);
-        System.out.println(thread_two);
-        printThreadState(thread_one);
-        printThreadState(thread_two);
+        CustomThread customThread = new CustomThread();
+        customThread.start();
+
+        Runnable runnable = () -> {
+            // this code goes in the run method of Runnable
+            for (int i = 0; i < 5; i++) {
+                System.out.print("2");
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        for (int i = 0; i < 5; i++) {
+            System.out.print("0");
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+//        System.out.println(thread_one);
+//        System.out.println(thread_two);
+//        printThreadState(thread_one);
+//        printThreadState(thread_two);
     }
 
     public static void printThreadState(Thread thread) {
