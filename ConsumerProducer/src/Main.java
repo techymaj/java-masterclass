@@ -7,15 +7,27 @@ class MessageRepository {
 
     public synchronized String read() {
         while (!hasMessage) {
+            try {
+                wait(); // wait for the producer to write a message
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = false;
+        notify(); // notify the waiting thread
         return message;
     }
 
     public synchronized void write(String message) {
         while (hasMessage) {
+            try {
+                wait(); // wait for the consumer to read the message
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = true;
+        notify(); // notify the waiting thread
         this.message = message;
     }
 }
