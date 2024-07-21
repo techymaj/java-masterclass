@@ -3,9 +3,24 @@ import java.util.concurrent.TimeUnit;
 public class BankAccount {
 
     private double balance;
+    private String name;
+    private final Object lockName = new Object();
+    private final Object lockBalance = new Object();
 
-    public BankAccount(double balance) {
+    public BankAccount(String name, double balance) {
         this.balance = balance;
+        this.name = name;
+    }
+
+    public void setName(String name) {
+        synchronized (lockName) {
+            this.name = name;
+            System.out.println("Updated name to: " + this.name);
+        }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public double getBalance() {
@@ -21,10 +36,21 @@ public class BankAccount {
         }
 
         // don't let other threads wait for the conversation to end
-        synchronized (this) {
+        synchronized (lockBalance) {
             double original = balance;
             balance += amount;
-            System.out.printf("Starting %.2f, Deposit: %.2f, new balance: %.2f\n", original, amount, balance);
+            System.out.printf("Starting %.2f, Deposit: %.2f, new balance: %.2f\n",
+                    original, amount, balance);
+            addPromoDollars(amount);
+        }
+    }
+
+    private void addPromoDollars(double amount) {
+        if (amount >= 5_000) {
+            synchronized (lockBalance) {
+                System.out.println("Congratulations! You've earned $100 in promo dollars!");
+                balance += 100;
+            }
         }
     }
 
