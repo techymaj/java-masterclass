@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -9,32 +10,49 @@ class MessageRepository {
     private final Lock lock = new ReentrantLock();
 
     public String read() {
-        lock.lock(); // acquire the lock
-        try {
-            while (!hasMessage) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+        if (lock.tryLock()) { // acquire the lock only if free
+            try {
+                while (!hasMessage) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+                hasMessage = false;
+            } finally {
+                lock.unlock();
             }
+        } else {
+            // can't acquire the lock
+            System.out.println("** Read was blocked ** " + lock);
             hasMessage = false;
-        } finally {
-            lock.unlock();
         }
         return message;
     }
 
-    public synchronized void write(String message) {
-        while (hasMessage) {
-            try {
-                wait(); // wait for the consumer to read the message
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    public void write(String message) {
+        try {
+            if (lock.tryLock(3, TimeUnit.SECONDS)) {
+                try {
+                    while (hasMessage) {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    hasMessage = true;
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                System.out.println("** Write is blocked ** " + lock);
+                hasMessage = true;
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        hasMessage = true;
-        notify(); // notify the waiting thread
         this.message = message;
     }
 }
@@ -104,8 +122,8 @@ public class Main {
 
         MessageRepository messageRepository = new MessageRepository(); // shared object
 
-        Thread reader = new Thread(new MessageReader(messageRepository));
-        Thread writer = new Thread(new MessageWriter(messageRepository));
+        Thread reader = new Thread(new MessageReader(messageRepository), "Reader");
+        Thread writer = new Thread(new MessageWriter(messageRepository), "Writer");
 
         // managing exceptions
         writer.setUncaughtExceptionHandler((_, exc) -> {
