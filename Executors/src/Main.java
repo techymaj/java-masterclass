@@ -1,6 +1,5 @@
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 
 class ColorThreadFactory implements ThreadFactory {
 
@@ -99,7 +98,7 @@ public class Main {
         System.out.println("All threads finished");
     }
 
-    public static void main(String[] args) {
+    public static void fixedmain(String[] args) {
 
         int count = 6;
         try (var multiExecutor = Executors.newFixedThreadPool(3,
@@ -126,5 +125,59 @@ public class Main {
                     + threadName.replace("ANSI_", "")
             + " " + i);
         }
+    }
+
+    public static void cachedmain(String[] args) {
+        try (var multiExecutor = Executors.newCachedThreadPool()) {
+            // number of threads executing even though a thread count wasn't specified will vary
+            var redValue = multiExecutor.submit(() -> Main.sum(1, 10, 1, "red"));
+            var blueValue = multiExecutor.submit(() -> Main.sum(10, 100, 10, "blue"));
+            var greenValue = multiExecutor.submit(() -> Main.sum(2, 20, 2, "green"));
+            Thread.sleep(1000);
+            System.out.println("-".repeat(100));
+            System.out.println(greenValue.get(500, TimeUnit.MILLISECONDS));
+            System.out.println(blueValue.get(500, TimeUnit.MILLISECONDS));
+            System.out.println(redValue.get(500, TimeUnit.MILLISECONDS));
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        try (var multiExecutor = Executors.newCachedThreadPool()) {
+            List<Callable<Integer>> tasks = List.of(
+                    () -> Main.sum(1, 10, 1, "red"),
+                    () -> Main.sum(11, 100, 10, "cyan"),
+                    () -> Main.sum(4, 40, 1, "blue"),
+                    () -> Main.sum(1, 20, 10, "green")
+            );
+            var stateResults = multiExecutor.invokeAny(tasks);
+//            stateResults.stream()
+//                    .map(Future::state)
+//                    .forEach(System.out::println);
+            System.out.println(stateResults);
+        } catch (InterruptedException ignored) {
+
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static int sum(int start, int end, int delta, String colorString) {
+        var threadColor = ThreadColor.ANSI_RESET;
+        try {
+            threadColor = ThreadColor.valueOf("ANSI_" + colorString.toUpperCase());
+        } catch (IllegalArgumentException ignored) {
+        }
+        String color = threadColor.color();
+        int sum = 0;
+        for (int i = start; i <= end; i += delta) {
+            sum += i;
+        }
+        System.out.println(color + Thread.currentThread().getName() + ", " + colorString
+                + " " + sum);
+
+        return sum;
     }
 }
