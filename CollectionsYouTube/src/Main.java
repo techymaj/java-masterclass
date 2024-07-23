@@ -12,7 +12,12 @@ public class Main {
         var iterator = integers.iterator();
         // enhanced for is syntactic sugar for an iterator
         while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+            var curr = iterator.next();
+            if (curr.equals(3)) {
+                iterator.remove();
+                System.out.println(curr + " removed");
+            }
+            System.out.println(curr);
         }
     }
 }
