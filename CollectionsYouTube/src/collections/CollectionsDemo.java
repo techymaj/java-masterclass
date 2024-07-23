@@ -19,6 +19,7 @@ public class CollectionsDemo {
 
         System.out.println(other == collection); // false
         System.out.println(other.equals(collection)); // true
+        collection.remove("Am");
 
         var stringArr = other.toArray(new String[0]);
         Stream.of(stringArr)
