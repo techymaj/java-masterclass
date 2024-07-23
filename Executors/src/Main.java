@@ -4,7 +4,12 @@ import java.util.concurrent.TimeUnit;
 
 class ColorThreadFactory implements ThreadFactory {
 
-    private final String threadName;
+    private String threadName;
+    private int colorValue = 1;
+
+    public ColorThreadFactory() {
+
+    }
 
     public ColorThreadFactory(ThreadColor color) {
         this.threadName = color.name();
@@ -12,8 +17,15 @@ class ColorThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable r) {
+        String name = threadName;
         Thread thread = new Thread(r);
-        thread.setName(threadName);
+        if (name == null) {
+            name = ThreadColor.values()[colorValue].name();
+        }
+        if (++colorValue > (ThreadColor.values().length - 1)) {
+            colorValue = 1;
+        }
+        thread.setName(name);
         return thread;
     }
 }
@@ -47,7 +59,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void singlemain(String[] args) {
 
 //        var blueExecutor = Executors.newSingleThreadExecutor();
 //        blueExecutor.execute(Main::countDown);
@@ -85,6 +97,18 @@ public class Main {
         }
 
         System.out.println("All threads finished");
+    }
+
+    public static void main(String[] args) {
+
+        int count = 6;
+        try (var multiExecutor = Executors.newFixedThreadPool(3,
+                new ColorThreadFactory())) {
+            for (int i = 0; i < count; i++) {
+                multiExecutor.execute(Main::countDown);
+            }
+            multiExecutor.shutdown();
+        }
     }
 
     private static void countDown() {
