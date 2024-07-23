@@ -1,3 +1,4 @@
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -6,26 +7,19 @@ public class Main {
 
         ShoeWarehouse shoeWarehouse = new ShoeWarehouse();
 
-        Thread producerThread = new Thread(shoeWarehouse::receiveOrder);
-        Thread consumerThreadOne = new Thread(shoeWarehouse::fulfillOrder);
-        Thread consumerThreadTwo = new Thread(shoeWarehouse::fulfillOrder);
-
-        try {
+        try (
+                var producerThread = Executors.newSingleThreadExecutor();
+                var consumerThreads = Executors.newCachedThreadPool()
+        ) {
             TimeUnit.NANOSECONDS.sleep(1);
-            System.out.println("================ Receiving orders ================");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        producerThread.start();
-
-        try {
+            System.out.println("\n================ Receiving orders ================");
+            producerThread.execute(() -> shoeWarehouse.receiveOrder(15));
             TimeUnit.SECONDS.sleep(1);
-            System.out.println("================ Fulfillment ================");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            System.out.println("\n================ Fulfillment ================");
+            consumerThreads.submit(shoeWarehouse::fulfillOrder);
+            consumerThreads.submit(shoeWarehouse::fulfillOrder);
+        } catch (InterruptedException ignore) {
 
-        consumerThreadOne.start();
-        consumerThreadTwo.start();
+        }
     }
 }
