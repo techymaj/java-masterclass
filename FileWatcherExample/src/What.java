@@ -18,13 +18,14 @@ public class What {
             while (true) {
                 relativePathWatchKey = watchService.take();
                 List<WatchEvent<?>> events = relativePathWatchKey.pollEvents();
-                for (var event : events) {
-                    System.out.println(event.kind() + " ---> " + event.context());
-                    if (event.kind().toString().equals("ENTRY_DELETE")) {
-                        break whileLoop;
+                events.forEach(watchEvent -> {
+                    System.out.println(watchEvent.kind() + " ---> " + watchEvent.context());
+                    if (watchEvent.kind().toString().equals("OVERFLOW")) {
+                        System.out.println("Lost some events");
                     }
-                }
-                relativePathWatchKey.reset();
+                });
+                var active = relativePathWatchKey.reset();
+                if (!active) break whileLoop;
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
