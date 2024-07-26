@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
+
 public class What {
 
     public static void main(String[] args) {
@@ -19,8 +21,9 @@ public class What {
                 relativePathWatchKey = watchService.take();
                 List<WatchEvent<?>> events = relativePathWatchKey.pollEvents();
                 events.forEach(watchEvent -> {
-                    System.out.println(watchEvent.kind() + " ---> " + watchEvent.context());
-                    if (watchEvent.kind().toString().equals("OVERFLOW")) {
+                    WatchEvent.Kind<?> kind = watchEvent.kind();
+                    System.out.println(kind + " ---> " + watchEvent.context());
+                    if (kind == OVERFLOW) {
                         System.out.println("Lost some events");
                     }
                 });
