@@ -33,51 +33,30 @@ public class Main {
         datasource.setDatabaseName(properties.getProperty("databaseName"));
         datasource.setUser(properties.getProperty("user"));
         datasource.setPassword(System.getenv("MYSQL_PASS"));
+        
+        String queryView = "SELECT * FROM music.artists limit 10";
 
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter an artist id: ");
+        try (
+                Connection connection = datasource.getConnection();
+                Statement statement = connection.createStatement()
+        ) {
+            System.out.println("=".repeat(70));
+            ResultSet query_two = statement.executeQuery(queryView);
+            var meta = query_two.getMetaData();
 
-            String artist_id = scanner.nextLine().trim();
-            int artistid;
-
-            if (artist_id.equalsIgnoreCase("exit")){
-                break;
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                System.out.printf("%-30s", meta.getColumnName(i).toUpperCase());
             }
-
-            try {
-                artistid = Integer.parseInt(artist_id);
-            } catch (NumberFormatException ignored) {
-                System.out.println("Wrong artist_id, defaulting to artist_id = 1");
-                artistid = 1;
-            }
-
-            String queryView = "SELECT * FROM music.artists WHERE artist_id=%d".formatted(artistid);
-
-            try(
-                    Connection connection = datasource.getConnection();
-                    Statement statement = connection.createStatement()
-            ) {
-                System.out.println("=".repeat(70));
-                System.out.println(artist_id);
-                System.out.println("=".repeat(70));
-                ResultSet query_two = statement.executeQuery(queryView);
-                var meta = query_two.getMetaData();
-
+            System.out.println();
+            while (query_two.next()) {
                 for (int i = 1; i <= meta.getColumnCount(); i++) {
-                    System.out.printf("%-30s", meta.getColumnName(i).toUpperCase());
+                    System.out.printf("%-30s", query_two.getString(i));
                 }
                 System.out.println();
-                while (query_two.next()) {
-                    for (int i = 1; i <= meta.getColumnCount(); i++) {
-                        System.out.printf("%-30s", query_two.getString(i));
-                    }
-                    System.out.println();
-                }
-                System.out.println();
-            } catch (SQLException e) {
-                throw new RuntimeException();
             }
+            System.out.println();
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
     }
 }
