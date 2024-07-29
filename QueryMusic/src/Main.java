@@ -41,34 +41,34 @@ public class Main {
                 Connection connection = datasource.getConnection();
                 Statement statement = connection.createStatement()
         ) {
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
+            ResultSet query_one = statement.executeQuery(query);
+            while (query_one.next()) {
                 System.out.printf("%d %s %n",
-                        resultSet.getInt(1),
-                        resultSet.getString("artist_name")
+                        query_one.getInt(1),
+                        query_one.getString("artist_name")
                 );
             }
 
             System.out.println("=".repeat(70));
             System.out.println(albumName);
             System.out.println("=".repeat(70));
-            ResultSet resultSetView = statement.executeQuery(queryView);
-            var resultMetaData = resultSetView.getMetaData();
-            for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
+            ResultSet query_two = statement.executeQuery(queryView);
+            var meta = query_two.getMetaData();
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
                 System.out.printf("%d %s %s%n",
                         i,
-                        resultMetaData.getColumnName(i),
-                        resultMetaData.getColumnTypeName(i)
+                        meta.getColumnName(i),
+                        meta.getColumnTypeName(i)
                 );
             }
             System.out.println("-".repeat(70));
-            for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
-                System.out.printf("%-15s", resultMetaData.getColumnName(i).toUpperCase());
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                System.out.printf("%-15s", meta.getColumnName(i).toUpperCase());
             }
             System.out.println();
-            while (resultSetView.next()) {
-                for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
-                    System.out.printf("%-15s", resultSetView.getString(i));
+            while (query_two.next()) {
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
+                    System.out.printf("%-15s", query_two.getString(i));
                 }
                 System.out.println();
             }
