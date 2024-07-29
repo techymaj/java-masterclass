@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Main {
 
@@ -33,47 +34,50 @@ public class Main {
         datasource.setUser(properties.getProperty("user"));
         datasource.setPassword(System.getenv("MYSQL_PASS"));
 
-        String albumName = "Tapestry";
-        String query = "SELECT * FROM music.artists";
-        String queryView = "SELECT * FROM music.albumview WHERE album_name='%s'".formatted(albumName);
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter an artist id: ");
 
-        try(
-                Connection connection = datasource.getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-            ResultSet query_one = statement.executeQuery(query);
-            while (query_one.next()) {
-                System.out.printf("%d %s %n",
-                        query_one.getInt(1),
-                        query_one.getString("artist_name")
-                );
+            String artist_id = scanner.nextLine().trim();
+            int artistid;
+
+            if (artist_id.equalsIgnoreCase("exit")){
+                break;
             }
 
-            System.out.println("=".repeat(70));
-            System.out.println(albumName);
-            System.out.println("=".repeat(70));
-            ResultSet query_two = statement.executeQuery(queryView);
-            var meta = query_two.getMetaData();
-            for (int i = 1; i <= meta.getColumnCount(); i++) {
-                System.out.printf("%d %s %s%n",
-                        i,
-                        meta.getColumnName(i),
-                        meta.getColumnTypeName(i)
-                );
+            try {
+                artistid = Integer.parseInt(artist_id);
+            } catch (NumberFormatException ignored) {
+                System.out.println("Wrong artist_id, defaulting to artist_id = 1");
+                artistid = 1;
             }
-            System.out.println("-".repeat(70));
-            for (int i = 1; i <= meta.getColumnCount(); i++) {
-                System.out.printf("%-15s", meta.getColumnName(i).toUpperCase());
-            }
-            System.out.println();
-            while (query_two.next()) {
+
+            String queryView = "SELECT * FROM music.artists WHERE artist_id=%d".formatted(artistid);
+
+            try(
+                    Connection connection = datasource.getConnection();
+                    Statement statement = connection.createStatement()
+            ) {
+                System.out.println("=".repeat(70));
+                System.out.println(artist_id);
+                System.out.println("=".repeat(70));
+                ResultSet query_two = statement.executeQuery(queryView);
+                var meta = query_two.getMetaData();
+
                 for (int i = 1; i <= meta.getColumnCount(); i++) {
-                    System.out.printf("%-15s", query_two.getString(i));
+                    System.out.printf("%-30s", meta.getColumnName(i).toUpperCase());
                 }
                 System.out.println();
+                while (query_two.next()) {
+                    for (int i = 1; i <= meta.getColumnCount(); i++) {
+                        System.out.printf("%-30s", query_two.getString(i));
+                    }
+                    System.out.println();
+                }
+                System.out.println();
+            } catch (SQLException e) {
+                throw new RuntimeException();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException();
         }
     }
 }
