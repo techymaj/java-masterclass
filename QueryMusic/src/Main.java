@@ -1,14 +1,13 @@
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Objects;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class Main {
@@ -34,10 +33,47 @@ public class Main {
         datasource.setUser(properties.getProperty("user"));
         datasource.setPassword(System.getenv("MYSQL_PASS"));
 
-        try(Connection connection = datasource.getConnection()) {
-            System.out.println("Connection successful!");
+        String albumName = "Tapestry";
+        String query = "SELECT * FROM music.artists";
+        String queryView = "SELECT * FROM music.albumview WHERE album_name='%s'".formatted(albumName);
+
+        try(
+                Connection connection = datasource.getConnection();
+                Statement statement = connection.createStatement()
+        ) {
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                System.out.printf("%d %s %n",
+                        resultSet.getInt(1),
+                        resultSet.getString("artist_name")
+                );
+            }
+
+            System.out.println("=".repeat(70));
+            System.out.println(albumName);
+            System.out.println("=".repeat(70));
+            ResultSet resultSetView = statement.executeQuery(queryView);
+            var resultMetaData = resultSetView.getMetaData();
+            for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
+                System.out.printf("%d %s %s%n",
+                        i,
+                        resultMetaData.getColumnName(i),
+                        resultMetaData.getColumnTypeName(i)
+                );
+            }
+            System.out.println("-".repeat(70));
+            for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
+                System.out.printf("%-15s", resultMetaData.getColumnName(i).toUpperCase());
+            }
+            System.out.println();
+            while (resultSetView.next()) {
+                for (int i = 1; i <= resultMetaData.getColumnCount(); i++) {
+                    System.out.printf("%-15s", resultSetView.getString(i));
+                }
+                System.out.println();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 }
