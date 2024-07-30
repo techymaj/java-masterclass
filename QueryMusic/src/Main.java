@@ -33,15 +33,27 @@ public class Main {
         datasource.setDatabaseName(properties.getProperty("databaseName"));
         datasource.setUser(properties.getProperty("user"));
         datasource.setPassword(System.getenv("MYSQL_PASS"));
-        
-        String queryView = "SELECT * FROM music.artists limit 10";
-
+        try {
+            datasource.setMaxRows(10);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        String query = "SELECT * FROM music.artists";
+//        String query = """
+//            WITH RankedRows AS (
+//                                SELECT *,
+//                                ROW_NUMBER() OVER (ORDER BY artist_id) AS row_num
+//                                FROM music.artists
+//                            )
+//                            SELECT *
+//                                FROM RankedRows
+//                            WHERE row_num <= 10""";
         try (
                 Connection connection = datasource.getConnection();
                 Statement statement = connection.createStatement()
         ) {
             System.out.println("=".repeat(70));
-            ResultSet query_two = statement.executeQuery(queryView);
+            ResultSet query_two = statement.executeQuery(query);
             var meta = query_two.getMetaData();
 
             for (int i = 1; i <= meta.getColumnCount(); i++) {
