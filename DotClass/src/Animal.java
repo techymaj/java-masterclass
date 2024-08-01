@@ -7,7 +7,7 @@ public class Animal {
 
 class Dog extends Animal {
 
-    public Dog(Class<?> classType) {
+    public Dog(Class<? extends Animal> classType) {
         if (classType == Dog.class) {
             eat();
         }
