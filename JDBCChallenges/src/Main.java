@@ -19,12 +19,17 @@ public class Main {
         dataSource.setPassword(System.getenv("MYSQL_PASS"));
 
         try (Connection connection = dataSource.getConnection()) {
+//            connection.setAutoCommit(false);
             DatabaseMetaData meta = connection.getMetaData();
             System.out.println(meta.getSQLStateType());
             if (!checkSchema(connection)) {
                 System.out.println("Storefront schema doesn't exist");
                 setUpSchema(connection);
             }
+//            insertOrder(connection);
+//            insertOrderDetails(connection);
+            deleteOrderAndDetails(connection, 1);
+            deleteOrderAndDetails(connection, 2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,6 +84,53 @@ public class Main {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void insertOrder(Connection conn) {
+        String queryInsert = """
+                INSERT INTO storefront.order (order_date)
+                VALUES(CURRENT_TIMESTAMP)
+                """;
+        try(Statement statement = conn.createStatement()) {
+            statement.addBatch(queryInsert);
+            statement.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void insertOrderDetails(Connection conn) {
+        String orderDetail_1 = """
+                INSERT INTO storefront.order_details (item_description, order_id)
+                VALUES("My first order", 1)
+                """;
+        String orderDetail_2 = """
+                INSERT INTO storefront.order_details (item_description, order_id)
+                VALUES("My second order", 2)
+                """;
+        try(Statement statement = conn.createStatement()) {
+            statement.addBatch(orderDetail_1);
+            statement.addBatch(orderDetail_2);
+            statement.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void deleteOrderAndDetails(Connection conn, int orderId) {
+        String orderDetail_1 = """
+                DELETE FROM storefront.order WHERE order_id = '%d'
+                """.formatted(orderId);
+        String orderDetail_2 = """
+                DELETE FROM storefront.order WHERE order_id = '%d'
+                """.formatted(orderId);
+        try(Statement statement = conn.createStatement()) {
+            statement.addBatch(orderDetail_1);
+            statement.addBatch(orderDetail_2);
+            statement.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
