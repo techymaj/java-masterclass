@@ -26,10 +26,10 @@ public class Main {
                 System.out.println("Storefront schema doesn't exist");
                 setUpSchema(connection);
             }
-//            insertOrder(connection);
-//            insertOrderDetails(connection);
-            deleteOrderAndDetails(connection, 1);
-            deleteOrderAndDetails(connection, 2);
+            insertOrder(connection);
+            insertOrderDetails(connection);
+//            deleteOrderAndDetails(connection, 1);
+//            deleteOrderAndDetails(connection, 2);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
