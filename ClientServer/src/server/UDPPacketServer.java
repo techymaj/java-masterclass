@@ -7,6 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.concurrent.TimeUnit;
 
 public class UDPPacketServer {
 
@@ -32,8 +38,36 @@ public class UDPPacketServer {
             } catch (UnsupportedAudioFileException e) {
                 System.err.println(e.getMessage());
             }
+            sendDataToClient(audioFileName, serverSocket, clientPacket);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 
-
+    private static void sendDataToClient(String file, DatagramSocket serverSocket, DatagramPacket clientPacket) {
+        ByteBuffer buffer = ByteBuffer.allocate(PACKET_SIZE);
+        try (FileChannel fileChannel = FileChannel.open(Path.of(file), StandardOpenOption.READ)) {
+            InetAddress clientIP = clientPacket.getAddress();
+            int clientPort = clientPacket.getPort();
+            while (true) {
+                buffer.clear();
+                // .read writes data to the buffer
+                if (fileChannel.read(buffer) == -1) {
+                    break;
+                }
+                buffer.flip();
+                while (buffer.hasRemaining()) {
+                    byte[] data = new byte[buffer.remaining()];
+                    buffer.get(data);
+                    DatagramPacket packet = new DatagramPacket(data, data.length, clientIP, clientPort);
+                    serverSocket.send(packet);
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(4);
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
