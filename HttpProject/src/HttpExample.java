@@ -12,12 +12,13 @@ public class HttpExample {
     public static void main(String[] args) {
 
         try {
-            URL url = new URL("https://majaliwa.tech/hi");
+//            URL url = new URL("https://majaliwa.tech");
+            URL url = new URL("http://localhost:8080/");
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setRequestProperty("User-Agent", "Chrome");
             // what content-types the server is willing to accept back
-            httpURLConnection.setRequestProperty("Accept", "application/json, text/html");
+            httpURLConnection.setRequestProperty("Accept", "application/json, text/html, text/plain");
             httpURLConnection.setReadTimeout(30_000);
 
             int responseCode = httpURLConnection.getResponseCode();
