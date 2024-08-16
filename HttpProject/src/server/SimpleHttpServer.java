@@ -26,6 +26,7 @@ public class SimpleHttpServer {
 
                 var parameters = parseParameters(data);
                 System.out.println(parameters);
+                exchange.getRequestHeaders().entrySet().forEach(System.out::println);
 
                 if (requestMethod.equals("POST")) visitorCounter++;
 
